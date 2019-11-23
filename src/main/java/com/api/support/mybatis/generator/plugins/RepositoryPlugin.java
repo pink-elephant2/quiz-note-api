@@ -59,14 +59,14 @@ public class RepositoryPlugin extends PluginAdapter {
 		if (this.isView) {
 
 			interfaze.addImportedType(
-					new FullyQualifiedJavaType("com.api.sns.common.business.repository.BaseQueryMapper"));
+					new FullyQualifiedJavaType("com.api.common.business.repository.BaseQueryMapper"));
 
 			interfaze.addSuperInterface(
 					new FullyQualifiedJavaType("BaseQueryMapper<" + baseTypeName + ", " + baseTypeName + "Example>"));
 
 		} else if (introspectedTable.hasPrimaryKeyColumns()) {
 
-			interfaze.addImportedType(new FullyQualifiedJavaType("com.api.sns.common.business.repository.BaseMapper"));
+			interfaze.addImportedType(new FullyQualifiedJavaType("com.api.common.business.repository.BaseMapper"));
 
 			interfaze.addImportedType(new FullyQualifiedJavaType(introspectedTable.getBaseRecordType() + "Key"));
 
@@ -75,7 +75,7 @@ public class RepositoryPlugin extends PluginAdapter {
 
 		} else {
 			interfaze.addImportedType(
-					new FullyQualifiedJavaType("com.api.sns.common.business.repository.BaseNoKeyMapper"));
+					new FullyQualifiedJavaType("com.api.common.business.repository.BaseNoKeyMapper"));
 
 			interfaze.addSuperInterface(
 					new FullyQualifiedJavaType("BaseNoKeyMapper<" + baseTypeName + ", " + baseTypeName + "Example>"));
@@ -135,7 +135,7 @@ public class RepositoryPlugin extends PluginAdapter {
 
 		if (this.isView) {
 			clsInterface.addImportedType(
-					new FullyQualifiedJavaType("com.api.sns.common.business.repository.BaseQueryRepository"));
+					new FullyQualifiedJavaType("com.api.common.business.repository.BaseQueryRepository"));
 
 			clsInterface.addSuperInterface(new FullyQualifiedJavaType(
 					"BaseQueryRepository<" + baseTypeName + ", " + baseTypeName + "Example>"));
@@ -143,14 +143,14 @@ public class RepositoryPlugin extends PluginAdapter {
 		} else if (introspectedTable.hasPrimaryKeyColumns()) {
 
 			clsInterface.addImportedType(
-					new FullyQualifiedJavaType("com.api.sns.common.business.repository.BaseRepository"));
+					new FullyQualifiedJavaType("com.api.common.business.repository.BaseRepository"));
 
 			clsInterface.addSuperInterface(new FullyQualifiedJavaType(
 					"BaseRepository<" + baseTypeName + "Key, " + baseTypeName + ", " + baseTypeName + "Example>"));
 
 		} else {
 			clsInterface.addImportedType(
-					new FullyQualifiedJavaType("com.api.sns.common.business.repository.BaseNoKeyRepository"));
+					new FullyQualifiedJavaType("com.api.common.business.repository.BaseNoKeyRepository"));
 
 			clsInterface.addSuperInterface(new FullyQualifiedJavaType(
 					"BaseNoKeyRepository<" + baseTypeName + ", " + baseTypeName + "Example>"));
@@ -220,7 +220,7 @@ public class RepositoryPlugin extends PluginAdapter {
 
 	public boolean modelExampleClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
 		topLevelClass.addSuperInterface(new FullyQualifiedJavaType("BaseExample"));
-		topLevelClass.addImportedType(new FullyQualifiedJavaType("com.api.sns.common.business.domain.BaseExample"));
+		topLevelClass.addImportedType(new FullyQualifiedJavaType("com.api.common.business.domain.BaseExample"));
 
 		return true;
 	}
@@ -238,7 +238,7 @@ public class RepositoryPlugin extends PluginAdapter {
 			try {
 				Set exp = (Set) importField.get(topLevelClass);
 
-				exp.remove(new FullyQualifiedJavaType("com.api.sns.common.business.domain.AbstractBaseEntity"));
+				exp.remove(new FullyQualifiedJavaType("com.api.common.business.domain.AbstractBaseEntity"));
 
 			} catch (IllegalArgumentException arg4) {
 

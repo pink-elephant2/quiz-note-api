@@ -1,6 +1,6 @@
 package com.api.note.quiz.domain;
 
-import com.api.sns.common.business.domain.BaseExample;
+import com.api.common.business.domain.BaseExample;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
