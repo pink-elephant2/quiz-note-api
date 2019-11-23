@@ -1,0 +1,1 @@
+CREATE DATABASE `quiz_note_dev` /*!40100 DEFAULT CHARACTER SET utf8 */

@@ -1,0 +1,435 @@
+﻿# A5:ER FORMAT:13
+# A5:ER ENCODING:UTF8
+# A5:ER Mk-1 Copyright (C)2007 m.matsubara
+# A5:SQL Mk-2 Copyright (C)1997 m.matsubara
+#  https://a5m2.mmatsubara.com
+
+[Manager]
+ProjectName=みんなのクイズ手帳
+Author=
+MaxEntityRowShow=1000
+ReadOnlyRecommend=1
+Page=Main
+PageInfo="Main",2,"A3Landscape",$FFFFFF
+Domain=SCOPE_TYPE=ENUM(\\QPRIVATE\\Q, \\QGROUP\\Q, \\QPUBLIC\\Q)
+DomainInfo="SCOPE_TYPE","ENUM(\QPRIVATE\Q, \QGROUP\Q, \QPUBLIC\Q)","公開種別"
+Domain=REASON=ENUM(\\QDISLIKE\\Q, \\QSPAM\\Q, \\QADULT\\Q, \\QDISCRIMINATION\\Q, \\QOTHER\\Q)
+DomainInfo="REASON","ENUM(\QDISLIKE\Q, \QSPAM\Q, \QADULT\Q, \QDISCRIMINATION\Q, \QOTHER\Q)","通報理由"
+Domain=REPORT_TARGET=ENUM(\\QACCOUNT\\Q, \\QQUIZ\\Q)
+DomainInfo="REPORT_TARGET","ENUM(\QACCOUNT\Q, \QQUIZ\Q)","通報対象"
+LogicalView=1
+DecodeDomain=0
+ViewModePageIndividually=1
+ViewMode=2
+ViewFormat=0
+UseNondependenceDashLine=0
+FontName=Meiryo UI
+FontSize=6
+PaperSize=A4Landscape
+HeaderLeft=
+HeaderCenter=
+HeaderRight=
+FooterLeft=
+FooterCenter=
+FooterRight=
+ShowPageoutRelation=1
+RDBMSType=5
+RDBMSTypeName=MySQL
+GenerateDropTableStatement=1
+DropTableIfExists=1
+BackupRestoreTempTable=0
+CommonField="削除フラグ","deleted","@VARCHAR(1)","NOT NULL",,"\q0\q","",$FFFFFFFF
+CommonField="作成日時","created_at","@DATETIME","NOT NULL",,"CURRENT_TIMESTAMP","",$FFFFFFFF
+CommonField="作成者","created_by","@VARCHAR(30)","NOT NULL",,"","",$FFFFFFFF
+CommonField="更新日時","updated_at","@DATETIME","NOT NULL",,"CURRENT_TIMESTAMP","",$FFFFFFFF
+CommonField="更新者","updated_by","@VARCHAR(30)","NOT NULL",,"","",$FFFFFFFF
+DefaultPkName=%0:s_PKC
+DefaultPkIndexName=%0:s_PKI
+DefaultIndexName=%0:s_IX%1:d
+DefaultFkName=%0:s_FK%1:d
+SqlSeparator=0
+CreateOrder=Dependent
+ShowTag=1
+ShowCommonAttributes=0
+
+[Entity]
+PName=t_account
+LName=アカウント
+Comment=
+TableOption=
+Page=MAIN
+Left=1100
+Top=600
+Field="アカウントID","account_id","INT(10)","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
+Field="ログインID","login_id","VARCHAR(30)","NOT NULL",,"","",$FFFFFFFF,""
+Field="アカウント名","name","VARCHAR(30)","NOT NULL",,"","",$FFFFFFFF,""
+Field="パスワード","password","VARCHAR(512)","NOT NULL",,"","",$FFFFFFFF,""
+Field="パスワード変更日時","password_change_date","DATETIME","NOT NULL",,"","",$FFFFFFFF,""
+Field="メールアドレス","mail","VARCHAR(256)",,,"","",$FFFFFFFF,""
+Field="自己紹介","description","VARCHAR(120)",,,"","",$FFFFFFFF,""
+Field="画像パス","img_url","VARCHAR(256)",,,"","",$FFFFFFFF,""
+Field="Twitterアカウント","twitter","VARCHAR(30)",,,"","",$FFFFFFFF,""
+Field="Facebookアカウント","facebook","VARCHAR(30)",,,"","",$FFFFFFFF,""
+Field="LINEアカウント","line","VARCHAR(30)",,,"","",$FFFFFFFF,""
+Field="課金フラグ","charged","TINYINT(1)",,,"","",$FFFFFFFF,""
+Field="フォロー件数","follow_count","INT(10)",,,"0","",$FFFFFFFF,""
+Field="フォローワー件数","follower_count","INT(10)",,,"0","",$FFFFFFFF,""
+Index=login_id=2,login_id 
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20191123184610
+Position="MAIN",1100,600
+ZOrder=0
+
+[Entity]
+PName=t_charge_log
+LName=課金ログ
+Comment=
+TableOption=
+Page=MAIN
+Left=700
+Top=100
+Field="課金ログID","charge_log_id","BIGINT","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
+Field="アカウントID","account_id","INT(10)","NOT NULL",,"","",$FFFFFFFF,""
+Field="課金額","charge","INT(10)","NOT NULL",,"","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20191123164616
+Position="MAIN",700,100
+ZOrder=1
+
+[Entity]
+PName=t_follow
+LName=フォロー
+Comment=
+TableOption=ENGINE=InnoDB DEFAULT CHARSET=utf8
+Page=MAIN
+Left=600
+Top=600
+Field="フォローID","follow_id","BIGINT","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
+Field="アカウントID","account_id","INT(10)","NOT NULL",,"","",$FFFFFFFF,""
+Field="フォローアカウントID","follow_account_id","INT(10)","NOT NULL",,"","",$FFFFFFFF,""
+Field="ブロックフラグ","block_flag","TINYINT(1)",,,"0","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20190415220449
+Position="MAIN",600,600
+ZOrder=2
+
+[Entity]
+PName=t_group
+LName=グループ
+Comment=
+TableOption=
+Page=MAIN
+Left=100
+Top=800
+Field="グループID","group_id","INT(10)","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
+Field="グループ名","name","VARCHAR(30)","NOT NULL",,"","",$FFFFFFFF,""
+Field="管理者アカウントID","account_id","INT(10)","NOT NULL",,"","",$FFFFFFFF,""
+Field="公式フラグ","official","TINYINT(1)",,,"","",$FFFFFFFF,""
+Field="自己紹介","description","VARCHAR(120)",,,"","",$FFFFFFFF,""
+Field="画像URL","img_url","VARCHAR(256)",,,"","",$FFFFFFFF,""
+Index=name=2,name 
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20191123215418
+Position="MAIN",100,800
+ZOrder=3
+
+[Entity]
+PName=t_group_member
+LName=グループメンバー
+Comment=
+TableOption=
+Page=MAIN
+Left=600
+Top=900
+Field="グループメンバーID","group_member_id","BIGINT(10)","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
+Field="グループID","group_id","INT(10)","NOT NULL",,"","",$FFFFFFFF,""
+Field="アカウントID","account_id","INT(10)","NOT NULL",,"","",$FFFFFFFF,""
+Field="ブロックフラグ","blocked","TINYINT(1)",,,"0","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20191123161429
+Position="MAIN",600,900
+ZOrder=4
+
+[Entity]
+PName=t_quiz
+LName=クイズ
+Comment=
+TableOption=
+Page=MAIN
+Left=1800
+Top=500
+Field="クイズID","quiz_id","BIGINT","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
+Field="アカウントID","account_id","INT(10)","NOT NULL",,"","",$FFFFFFFF,""
+Field="問題","question","VARCHAR(200)","NOT NULL",,"","",$FFFFFFFF,""
+Field="答え","answer","VARCHAR(50)","NOT NULL",,"","",$FFFFFFFF,""
+Field="ヒント","hint","VARCHAR(50)",,,"","",$FFFFFFFF,""
+Field="解説","explanation","VARCHAR(100)",,,"","",$FFFFFFFF,""
+Field="音声パス","sound_url","VARCHAR(256)",,,"","",$FFFFFFFF,""
+Field="公開種別","scope_type","*SCOPE_TYPE",,,"","",$FFFFFFFF,""
+Field="いいね件数","like_count","INT(10)",,,"0","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20191123185521
+Position="MAIN",1800,500
+ZOrder=5
+
+[Entity]
+PName=t_quiz_like
+LName=クイズいいね
+Comment=
+TableOption=
+Page=MAIN
+Left=1600
+Top=900
+Field="クイズいいねID","quiz_like_id","BIGINT","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
+Field="クイズID","quiz_id","BIGINT","NOT NULL",,"","",$FFFFFFFF,""
+Field="アカウントID","account_id","INT(10)","NOT NULL",,"","",$FFFFFFFF,""
+Field="いいねフラグ","liked","TINYINT(1)","NOT NULL",,"","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20191123184908
+Position="MAIN",1600,900
+ZOrder=6
+
+[Entity]
+PName=t_ban_report
+LName=通報
+Comment=
+TableOption=
+Page=MAIN
+Left=1300
+Top=100
+Field="通報ID","report_id","INT(10)","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
+Field="通報対象","report_target","*REPORT_TARGET","NOT NULL",,"","",$FFFFFFFF,""
+Field="理由","reason","*REASON","NOT NULL",,"","",$FFFFFFFF,""
+Field="アカウントID","account_id","INT(10)",,,"","",$FFFFFFFF,""
+Field="クイズID","quiz_id","BIGINT",,,"","",$FFFFFFFF,""
+Field="既読フラグ","read_flag","TINYINT(1)","NOT NULL",,"","",$FFFFFFFF,""
+Field="処理済みフラグ","done_flag","TINYINT(1)","NOT NULL",,"","",$FFFFFFFF,""
+Field="メモ","memo","VARCHAR(256)",,,"","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20191123210115
+Position="MAIN",1300,100
+ZOrder=7
+
+[Relation]
+Entity1=t_group
+Entity2=t_group_member
+RelationType1=2
+RelationType2=3
+Fields1=group_id
+Fields2=group_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,2687,7313,3046,R,R
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=269
+Bar2=731
+Bar3=305
+TermPos1=R
+TermPos2=R
+ZOrder=8
+
+[Relation]
+Entity1=t_account
+Entity2=t_group_member
+RelationType1=2
+RelationType2=3
+Fields1=account_id
+Fields2=account_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,2687,7313,1889,R,R
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=269
+Bar2=731
+Bar3=189
+TermPos1=R
+TermPos2=R
+ZOrder=9
+
+[Relation]
+Entity1=t_account
+Entity2=t_ban_report
+RelationType1=1
+RelationType2=3
+Fields1=account_id
+Fields2=account_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,721,9279,1857,R,R
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=72
+Bar2=928
+Bar3=186
+TermPos1=R
+TermPos2=R
+ZOrder=10
+
+[Relation]
+Entity1=t_account
+Entity2=t_charge_log
+RelationType1=2
+RelationType2=3
+Fields1=account_id
+Fields2=account_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,1210,8790,1889,R,R
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=121
+Bar2=879
+Bar3=189
+TermPos1=R
+TermPos2=R
+ZOrder=11
+
+[Relation]
+Entity1=t_quiz
+Entity2=t_quiz_like
+RelationType1=2
+RelationType2=3
+Fields1=quiz_id
+Fields2=quiz_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,2329,7671,2304,R,R
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=233
+Bar2=767
+Bar3=230
+TermPos1=R
+TermPos2=R
+ZOrder=12
+
+[Relation]
+Entity1=t_account
+Entity2=t_quiz_like
+RelationType1=2
+RelationType2=3
+Fields1=account_id
+Fields2=account_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,2329,7671,1852,R,R
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=233
+Bar2=767
+Bar3=185
+TermPos1=R
+TermPos2=R
+ZOrder=13
+
+[Relation]
+Entity1=t_quiz
+Entity2=t_ban_report
+RelationType1=1
+RelationType2=3
+Fields1=quiz_id
+Fields2=quiz_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,3419,6581,3484,R,R
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=342
+Bar2=658
+Bar3=348
+TermPos1=R
+TermPos2=R
+ZOrder=14
+
+[Relation]
+Entity1=t_account
+Entity2=t_follow
+RelationType1=2
+RelationType2=3
+Fields1=account_id
+Fields2=account_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,5000,5000,5000,R,R
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=500
+Bar2=500
+Bar3=500
+TermPos1=R
+TermPos2=R
+ZOrder=15
+
+[Entity]
+PName=t_quiz_tag
+LName=クイズタグ
+Comment=
+TableOption=
+Page=MAIN
+Left=2100
+Top=500
+Field="タグID","quiz_tag_id","BIGINT","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
+Field="クイズID","quiz_id","BIGINT","NOT NULL",,"","",$FFFFFFFF,""
+Field="タグ名","name","VARCHAR(50)","NOT NULL",,"","",$FFFFFFFF,""
+Index=name=2,name 
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20191123184425
+Position="MAIN",2100,500
+ZOrder=16
+
+[Relation]
+Entity1=t_quiz
+Entity2=t_quiz_tag
+RelationType1=2
+RelationType2=3
+Fields1=quiz_id
+Fields2=quiz_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,2104,7896,2198,R,R
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=210
+Bar2=790
+Bar3=220
+TermPos1=R
+TermPos2=R
+ZOrder=17
