@@ -37,6 +37,15 @@
     <sqlMapGenerator targetPackage="com.api.note.quiz.repository" targetProject="quiz-note-api/src/main/resources" />
     <javaClientGenerator targetPackage="com.api.note.quiz.repository" targetProject="quiz-note-api/src/main/java" type="XMLMAPPER" />
 
+    <!-- 対象テーブル -->
+    <table tableName="t_account" modelType="hierarchical"></table>
+    <table tableName="t_ban_report" modelType="hierarchical"></table>
+    <table tableName="t_charge_log" modelType="hierarchical"></table>
+    <table tableName="t_follow" modelType="hierarchical"></table>
+    <table tableName="t_group" modelType="hierarchical"></table>
+    <table tableName="t_group_member" modelType="hierarchical"></table>
+    <table tableName="t_quiz" modelType="hierarchical"></table>
+    <table tableName="t_quiz_tag" modelType="hierarchical"></table>
 
   </context>
 </generatorConfiguration>
