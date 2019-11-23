@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+  <context id="MainTables" defaultModelType="flat"  targetRuntime ="MyBatis3">
+
+      <!-- 生成するファイルの文字コードは UTF-8 -->
+    <property name="javaFileEncoding" value="UTF-8" />
+    <!-- mysql -->
+    <property name="autoDelimitKeywords" value="true" />
+    <property name="beginningDelimiter" value="`"/>
+    <property name="endingDelimiter" value="`"/>
+
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+    <plugin type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin" />
+    <plugin type="com.api.support.mybatis.generator.plugins.PagingPlugin" />
+    <plugin type="com.api.support.mybatis.generator.plugins.OptimisticLockPlugin" />
+    <plugin type="com.api.support.mybatis.generator.plugins.RepositoryPlugin" />
+
+    <!-- 生成される Java ファイルのコメントに日付を付与しない -->
+    <commentGenerator>
+      <property name="suppressDate" value="true" />
+      <property name="addRemarkComments" value="true"/>
+    </commentGenerator>
+
+    <jdbcConnection connectionURL="jdbc:mysql://localhost:3306/quiz_note_dev"
+    driverClass="com.mysql.jdbc.Driver"
+    password="" userId="root" />
+
+    <javaTypeResolver type="com.api.support.mybatis.generator.resovler.MySqlJavaTypeResolver">
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.api.note.quiz.domain" targetProject="quiz-note-api/src/main/java">
+      <property name="rootClass" value="com.api.common.business.domain.AbstractBaseEntity" />
+      <property name="trimStrings" value="true" />
+    </javaModelGenerator>
+    <sqlMapGenerator targetPackage="com.api.note.quiz.repository" targetProject="quiz-note-api/src/main/resources" />
+    <javaClientGenerator targetPackage="com.api.note.quiz.repository" targetProject="quiz-note-api/src/main/java" type="XMLMAPPER" />
+
+
+  </context>
+</generatorConfiguration>
