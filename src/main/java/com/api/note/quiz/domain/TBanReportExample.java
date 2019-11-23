@@ -1,6 +1,8 @@
 package com.api.note.quiz.domain;
 
 import com.api.common.business.domain.BaseExample;
+import com.api.note.quiz.enums.ReportReasonEnum;
+import com.api.note.quiz.enums.ReportTargetEnum;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -322,62 +324,62 @@ public class TBanReportExample implements BaseExample {
             return (Criteria) this;
         }
 
-        public Criteria andReportTargetEqualTo(String value) {
+        public Criteria andReportTargetEqualTo(ReportTargetEnum value) {
             addCriterion("report_target =", value, "reportTarget");
             return (Criteria) this;
         }
 
-        public Criteria andReportTargetNotEqualTo(String value) {
+        public Criteria andReportTargetNotEqualTo(ReportTargetEnum value) {
             addCriterion("report_target <>", value, "reportTarget");
             return (Criteria) this;
         }
 
-        public Criteria andReportTargetGreaterThan(String value) {
+        public Criteria andReportTargetGreaterThan(ReportTargetEnum value) {
             addCriterion("report_target >", value, "reportTarget");
             return (Criteria) this;
         }
 
-        public Criteria andReportTargetGreaterThanOrEqualTo(String value) {
+        public Criteria andReportTargetGreaterThanOrEqualTo(ReportTargetEnum value) {
             addCriterion("report_target >=", value, "reportTarget");
             return (Criteria) this;
         }
 
-        public Criteria andReportTargetLessThan(String value) {
+        public Criteria andReportTargetLessThan(ReportTargetEnum value) {
             addCriterion("report_target <", value, "reportTarget");
             return (Criteria) this;
         }
 
-        public Criteria andReportTargetLessThanOrEqualTo(String value) {
+        public Criteria andReportTargetLessThanOrEqualTo(ReportTargetEnum value) {
             addCriterion("report_target <=", value, "reportTarget");
             return (Criteria) this;
         }
 
-        public Criteria andReportTargetLike(String value) {
+        public Criteria andReportTargetLike(ReportTargetEnum value) {
             addCriterion("report_target like", value, "reportTarget");
             return (Criteria) this;
         }
 
-        public Criteria andReportTargetNotLike(String value) {
+        public Criteria andReportTargetNotLike(ReportTargetEnum value) {
             addCriterion("report_target not like", value, "reportTarget");
             return (Criteria) this;
         }
 
-        public Criteria andReportTargetIn(List<String> values) {
+        public Criteria andReportTargetIn(List<ReportTargetEnum> values) {
             addCriterion("report_target in", values, "reportTarget");
             return (Criteria) this;
         }
 
-        public Criteria andReportTargetNotIn(List<String> values) {
+        public Criteria andReportTargetNotIn(List<ReportTargetEnum> values) {
             addCriterion("report_target not in", values, "reportTarget");
             return (Criteria) this;
         }
 
-        public Criteria andReportTargetBetween(String value1, String value2) {
+        public Criteria andReportTargetBetween(ReportTargetEnum value1, ReportTargetEnum value2) {
             addCriterion("report_target between", value1, value2, "reportTarget");
             return (Criteria) this;
         }
 
-        public Criteria andReportTargetNotBetween(String value1, String value2) {
+        public Criteria andReportTargetNotBetween(ReportTargetEnum value1, ReportTargetEnum value2) {
             addCriterion("report_target not between", value1, value2, "reportTarget");
             return (Criteria) this;
         }
@@ -392,62 +394,62 @@ public class TBanReportExample implements BaseExample {
             return (Criteria) this;
         }
 
-        public Criteria andReasonEqualTo(String value) {
+        public Criteria andReasonEqualTo(ReportReasonEnum value) {
             addCriterion("reason =", value, "reason");
             return (Criteria) this;
         }
 
-        public Criteria andReasonNotEqualTo(String value) {
+        public Criteria andReasonNotEqualTo(ReportReasonEnum value) {
             addCriterion("reason <>", value, "reason");
             return (Criteria) this;
         }
 
-        public Criteria andReasonGreaterThan(String value) {
+        public Criteria andReasonGreaterThan(ReportReasonEnum value) {
             addCriterion("reason >", value, "reason");
             return (Criteria) this;
         }
 
-        public Criteria andReasonGreaterThanOrEqualTo(String value) {
+        public Criteria andReasonGreaterThanOrEqualTo(ReportReasonEnum value) {
             addCriterion("reason >=", value, "reason");
             return (Criteria) this;
         }
 
-        public Criteria andReasonLessThan(String value) {
+        public Criteria andReasonLessThan(ReportReasonEnum value) {
             addCriterion("reason <", value, "reason");
             return (Criteria) this;
         }
 
-        public Criteria andReasonLessThanOrEqualTo(String value) {
+        public Criteria andReasonLessThanOrEqualTo(ReportReasonEnum value) {
             addCriterion("reason <=", value, "reason");
             return (Criteria) this;
         }
 
-        public Criteria andReasonLike(String value) {
+        public Criteria andReasonLike(ReportReasonEnum value) {
             addCriterion("reason like", value, "reason");
             return (Criteria) this;
         }
 
-        public Criteria andReasonNotLike(String value) {
+        public Criteria andReasonNotLike(ReportReasonEnum value) {
             addCriterion("reason not like", value, "reason");
             return (Criteria) this;
         }
 
-        public Criteria andReasonIn(List<String> values) {
+        public Criteria andReasonIn(List<ReportReasonEnum> values) {
             addCriterion("reason in", values, "reason");
             return (Criteria) this;
         }
 
-        public Criteria andReasonNotIn(List<String> values) {
+        public Criteria andReasonNotIn(List<ReportReasonEnum> values) {
             addCriterion("reason not in", values, "reason");
             return (Criteria) this;
         }
 
-        public Criteria andReasonBetween(String value1, String value2) {
+        public Criteria andReasonBetween(ReportReasonEnum value1, ReportReasonEnum value2) {
             addCriterion("reason between", value1, value2, "reason");
             return (Criteria) this;
         }
 
-        public Criteria andReasonNotBetween(String value1, String value2) {
+        public Criteria andReasonNotBetween(ReportReasonEnum value1, ReportReasonEnum value2) {
             addCriterion("reason not between", value1, value2, "reason");
             return (Criteria) this;
         }
@@ -1089,16 +1091,6 @@ public class TBanReportExample implements BaseExample {
 
         public Criteria andUpdatedByNotBetween(String value1, String value2) {
             addCriterion("updated_by not between", value1, value2, "updatedBy");
-            return (Criteria) this;
-        }
-
-        public Criteria andReportTargetLikeInsensitive(String value) {
-            addCriterion("upper(report_target) like", value.toUpperCase(), "reportTarget");
-            return (Criteria) this;
-        }
-
-        public Criteria andReasonLikeInsensitive(String value) {
-            addCriterion("upper(reason) like", value.toUpperCase(), "reason");
             return (Criteria) this;
         }
 

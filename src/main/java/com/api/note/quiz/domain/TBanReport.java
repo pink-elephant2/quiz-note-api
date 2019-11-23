@@ -1,5 +1,7 @@
 package com.api.note.quiz.domain;
 
+import com.api.note.quiz.enums.ReportReasonEnum;
+import com.api.note.quiz.enums.ReportTargetEnum;
 import java.io.Serializable;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -21,7 +23,7 @@ public class TBanReport extends TBanReportKey implements Serializable {
      *
      * @mbg.generated
      */
-    private String reportTarget;
+    private ReportTargetEnum reportTarget;
 
     /**
      * Database Column Remarks:
@@ -32,7 +34,7 @@ public class TBanReport extends TBanReportKey implements Serializable {
      *
      * @mbg.generated
      */
-    private String reason;
+    private ReportReasonEnum reason;
 
     /**
      * Database Column Remarks:
@@ -105,7 +107,7 @@ public class TBanReport extends TBanReportKey implements Serializable {
      *
      * @mbg.generated
      */
-    public String getReportTarget() {
+    public ReportTargetEnum getReportTarget() {
         return reportTarget;
     }
 
@@ -117,8 +119,8 @@ public class TBanReport extends TBanReportKey implements Serializable {
      *
      * @mbg.generated
      */
-    public void setReportTarget(String reportTarget) {
-        this.reportTarget = reportTarget == null ? null : reportTarget.trim();
+    public void setReportTarget(ReportTargetEnum reportTarget) {
+        this.reportTarget = reportTarget;
     }
 
     /**
@@ -129,7 +131,7 @@ public class TBanReport extends TBanReportKey implements Serializable {
      *
      * @mbg.generated
      */
-    public String getReason() {
+    public ReportReasonEnum getReason() {
         return reason;
     }
 
@@ -141,8 +143,8 @@ public class TBanReport extends TBanReportKey implements Serializable {
      *
      * @mbg.generated
      */
-    public void setReason(String reason) {
-        this.reason = reason == null ? null : reason.trim();
+    public void setReason(ReportReasonEnum reason) {
+        this.reason = reason;
     }
 
     /**

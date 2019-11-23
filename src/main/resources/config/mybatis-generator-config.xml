@@ -39,12 +39,17 @@
 
     <!-- 対象テーブル -->
     <table tableName="t_account" modelType="hierarchical"></table>
-    <table tableName="t_ban_report" modelType="hierarchical"></table>
+    <table tableName="t_ban_report" modelType="hierarchical">
+        <columnOverride column="report_target" javaType="com.api.note.quiz.enums.ReportTargetEnum" />
+        <columnOverride column="reason" javaType="com.api.note.quiz.enums.ReportReasonEnum" />
+    </table>
     <table tableName="t_charge_log" modelType="hierarchical"></table>
     <table tableName="t_follow" modelType="hierarchical"></table>
     <table tableName="t_group" modelType="hierarchical"></table>
     <table tableName="t_group_member" modelType="hierarchical"></table>
-    <table tableName="t_quiz" modelType="hierarchical"></table>
+    <table tableName="t_quiz" modelType="hierarchical">
+        <columnOverride column="report_target" javaType="com.api.note.quiz.enums.ScopeTypeEnum" />
+    </table>
     <table tableName="t_quiz_tag" modelType="hierarchical"></table>
 
   </context>
