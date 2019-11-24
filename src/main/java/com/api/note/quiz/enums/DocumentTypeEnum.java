@@ -13,8 +13,10 @@ public enum DocumentTypeEnum {
 
 	/** アカウント画像 */
 	ACCOUNT("account"),
-	/** 写真 */
-	PHOTO("photo");
+	/** グループ画像 */
+	GROUP("group"),
+	/** クイズ音声 */
+	SOUND("sound");
 
 	DocumentTypeEnum(String uploadPath) {
 		this.uploadPath = uploadPath;
