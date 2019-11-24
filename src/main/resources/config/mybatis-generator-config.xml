@@ -53,6 +53,7 @@
     <table tableName="t_quiz" modelType="hierarchical">
         <columnOverride column="report_target" javaType="com.api.note.quiz.enums.ScopeTypeEnum" />
     </table>
+    <table tableName="t_quiz_like" modelType="hierarchical"></table>
     <table tableName="t_quiz_tag" modelType="hierarchical"></table>
 
     <!-- 対象ビュー -->
