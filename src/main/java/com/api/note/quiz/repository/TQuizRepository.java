@@ -6,4 +6,12 @@ import com.api.note.quiz.domain.TQuizExample;
 import com.api.note.quiz.domain.TQuizKey;
 
 public interface TQuizRepository extends BaseRepository<TQuizKey, TQuiz, TQuizExample> {
+
+	/**
+	 * クイズIDからレコードを取得する
+	 *
+	 * @param quizId クイズID
+	 */
+	public TQuiz findOneById(Long quizId);
+
 }

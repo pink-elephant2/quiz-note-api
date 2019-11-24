@@ -11,15 +11,15 @@ import lombok.Getter;
 public enum ActivityTypeEnum implements BaseEnum {
 
 	/** コメント */
-	COMMENT("Comment", "コメント", 1),
+	//	COMMENT("Comment", "コメント", 1),
 	/** いいね */
 	LIKE("Like", "いいね", 2),
 	/** フォロー */
 	FOLLOW("Follow", "フォロー", 3),
 	/** 新しい投稿 */
-	NEW_POST("New Post", "新しい投稿", 4),
+	NEW_POST("New Post", "新しい投稿", 4);
 	/** コメントいいね */
-	COMMENT_LIKE("Comment Like", "コメントいいね", 5);
+	//	COMMENT_LIKE("Comment Like", "コメントいいね", 5);
 
 	/** ステータス名称（英語） */
 	private final String nameEn;
@@ -43,9 +43,9 @@ public enum ActivityTypeEnum implements BaseEnum {
 	}
 
 	/** コメントか */
-	public boolean isComment() {
-		return this == COMMENT;
-	}
+	//	public boolean isComment() {
+	//		return this == COMMENT;
+	//	}
 
 	/** いいねか */
 	public boolean isLike() {
@@ -63,7 +63,7 @@ public enum ActivityTypeEnum implements BaseEnum {
 	}
 
 	/** コメントいいねか */
-	public boolean isCommentLike() {
-		return this == COMMENT_LIKE;
-	}
+	//	public boolean isCommentLike() {
+	//		return this == COMMENT_LIKE;
+	//	}
 }
