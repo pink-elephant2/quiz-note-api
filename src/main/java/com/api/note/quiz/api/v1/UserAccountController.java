@@ -1,4 +1,4 @@
-package com.api.note.quiz.api.v1.hello;
+package com.api.note.quiz.api.v1;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
