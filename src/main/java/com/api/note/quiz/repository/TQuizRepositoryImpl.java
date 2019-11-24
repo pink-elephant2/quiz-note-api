@@ -38,4 +38,19 @@ public class TQuizRepositoryImpl implements TQuizRepository {
 		return quiz;
 	}
 
+	/**
+	 * クイズCDからレコードを取得する
+	 *
+	 * @param quizCd クイズCD
+	 */
+	@Override
+	public TQuiz findOneByCd(String quizCd) {
+		TQuizExample quizExample = new TQuizExample();
+		quizExample.createCriteria().andQuizCdEqualTo(quizCd).andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
+		TQuiz quiz = findOneBy(quizExample);
+		if (quiz == null) {
+			 throw new NotFoundException("クイズが存在しません");
+		}
+		return quiz;
+	}
 }

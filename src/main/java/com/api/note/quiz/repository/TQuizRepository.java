@@ -14,4 +14,11 @@ public interface TQuizRepository extends BaseRepository<TQuizKey, TQuiz, TQuizEx
 	 */
 	public TQuiz findOneById(Long quizId);
 
+	/**
+	 * クイズCDからレコードを取得する
+	 *
+	 * @param quizCd クイズCD
+	 */
+	public TQuiz findOneByCd(String quizCd);
+
 }
