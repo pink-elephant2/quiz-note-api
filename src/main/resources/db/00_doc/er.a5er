@@ -173,6 +173,7 @@ Page=TABLE
 Left=1800
 Top=500
 Field="クイズID","quiz_id","BIGINT","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
+Field="クイズCD","quiz_cd","VARCHAR(50)","NOT NULL",,"","",$FFFFFFFF,""
 Field="アカウントID","account_id","INT(10)","NOT NULL",,"","",$FFFFFFFF,""
 Field="問題","question","VARCHAR(200)","NOT NULL",,"","",$FFFFFFFF,""
 Field="答え","answer","VARCHAR(50)","NOT NULL",,"","",$FFFFFFFF,""
@@ -181,10 +182,11 @@ Field="解説","explanation","VARCHAR(100)",,,"","",$FFFFFFFF,""
 Field="音声パス","sound_url","VARCHAR(256)",,,"","",$FFFFFFFF,""
 Field="公開種別","scope_type","*SCOPE_TYPE",,,"","",$FFFFFFFF,""
 Field="いいね件数","like_count","INT(10)",,,"0","",$FFFFFFFF,""
+Index==2,quiz_cd 
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-ModifiedDateTime=20191123185521
+ModifiedDateTime=20191124140255
 Position="TABLE",1800,500
 ZOrder=5
 

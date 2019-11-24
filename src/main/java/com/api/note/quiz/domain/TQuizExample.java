@@ -312,6 +312,76 @@ public class TQuizExample implements BaseExample {
             return (Criteria) this;
         }
 
+        public Criteria andQuizCdIsNull() {
+            addCriterion("quiz_cd is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuizCdIsNotNull() {
+            addCriterion("quiz_cd is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuizCdEqualTo(String value) {
+            addCriterion("quiz_cd =", value, "quizCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuizCdNotEqualTo(String value) {
+            addCriterion("quiz_cd <>", value, "quizCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuizCdGreaterThan(String value) {
+            addCriterion("quiz_cd >", value, "quizCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuizCdGreaterThanOrEqualTo(String value) {
+            addCriterion("quiz_cd >=", value, "quizCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuizCdLessThan(String value) {
+            addCriterion("quiz_cd <", value, "quizCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuizCdLessThanOrEqualTo(String value) {
+            addCriterion("quiz_cd <=", value, "quizCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuizCdLike(String value) {
+            addCriterion("quiz_cd like", value, "quizCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuizCdNotLike(String value) {
+            addCriterion("quiz_cd not like", value, "quizCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuizCdIn(List<String> values) {
+            addCriterion("quiz_cd in", values, "quizCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuizCdNotIn(List<String> values) {
+            addCriterion("quiz_cd not in", values, "quizCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuizCdBetween(String value1, String value2) {
+            addCriterion("quiz_cd between", value1, value2, "quizCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuizCdNotBetween(String value1, String value2) {
+            addCriterion("quiz_cd not between", value1, value2, "quizCd");
+            return (Criteria) this;
+        }
+
         public Criteria andAccountIdIsNull() {
             addCriterion("account_id is null");
             return (Criteria) this;
@@ -1179,6 +1249,11 @@ public class TQuizExample implements BaseExample {
 
         public Criteria andUpdatedByNotBetween(String value1, String value2) {
             addCriterion("updated_by not between", value1, value2, "updatedBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuizCdLikeInsensitive(String value) {
+            addCriterion("upper(quiz_cd) like", value.toUpperCase(), "quizCd");
             return (Criteria) this;
         }
 

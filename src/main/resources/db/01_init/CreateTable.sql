@@ -1,5 +1,5 @@
 -- Project Name : みんなのクイズ手帳
--- Date/Time    : 2019/11/24 11:10:20
+-- Date/Time    : 2019/11/24 14:03:30
 -- Author       : c5apple
 -- RDBMS Type   : MySQL
 -- Application  : A5:SQL Mk-2
@@ -177,6 +177,7 @@ drop table if exists t_quiz cascade;
 
 create table t_quiz (
   quiz_id BIGINT not null AUTO_INCREMENT comment 'クイズID'
+  , quiz_cd VARCHAR(50) not null comment 'クイズCD'
   , account_id INT(10) not null comment 'アカウントID'
   , question VARCHAR(200) not null comment '問題'
   , answer VARCHAR(50) not null comment '答え'
@@ -192,6 +193,8 @@ create table t_quiz (
   , updated_by VARCHAR(30) not null comment '更新者'
   , constraint t_quiz_PKC primary key (quiz_id)
 ) comment 'クイズ' ;
+
+alter table t_quiz add unique t_quiz_IX1 (quiz_cd) ;
 
 -- フォロービュー
 drop view if exists v_follow;
