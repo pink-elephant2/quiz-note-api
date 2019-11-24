@@ -39,6 +39,9 @@
 
     <!-- 対象テーブル -->
     <table tableName="t_account" modelType="hierarchical"></table>
+    <table tableName="t_activity" modelType="hierarchical">
+        <columnOverride column="activity_type" javaType="com.api.note.quiz.enums.ActivityTypeEnum" />
+    </table>
     <table tableName="t_ban_report" modelType="hierarchical">
         <columnOverride column="report_target" javaType="com.api.note.quiz.enums.ReportTargetEnum" />
         <columnOverride column="reason" javaType="com.api.note.quiz.enums.ReportReasonEnum" />
@@ -51,6 +54,9 @@
         <columnOverride column="report_target" javaType="com.api.note.quiz.enums.ScopeTypeEnum" />
     </table>
     <table tableName="t_quiz_tag" modelType="hierarchical"></table>
+
+    <!-- 対象ビュー -->
+    <table tableName="v_follow" modelType="hierarchical"></table>
 
   </context>
 </generatorConfiguration>

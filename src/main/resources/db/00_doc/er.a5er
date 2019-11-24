@@ -9,14 +9,18 @@ ProjectName=みんなのクイズ手帳
 Author=
 MaxEntityRowShow=1000
 ReadOnlyRecommend=1
-Page=Main
-PageInfo="Main",2,"A3Landscape",$FFFFFF
+Page=Table
+PageInfo="Table",2,"A3Landscape",$FFFFFF
+Page=View
+PageInfo="View",2,"A3Landscape",$FFFFFF
 Domain=SCOPE_TYPE=ENUM(\\QPRIVATE\\Q, \\QGROUP\\Q, \\QPUBLIC\\Q)
 DomainInfo="SCOPE_TYPE","ENUM(\QPRIVATE\Q, \QGROUP\Q, \QPUBLIC\Q)","公開種別"
 Domain=REASON=ENUM(\\QDISLIKE\\Q, \\QSPAM\\Q, \\QADULT\\Q, \\QDISCRIMINATION\\Q, \\QOTHER\\Q)
 DomainInfo="REASON","ENUM(\QDISLIKE\Q, \QSPAM\Q, \QADULT\Q, \QDISCRIMINATION\Q, \QOTHER\Q)","通報理由"
 Domain=REPORT_TARGET=ENUM(\\QACCOUNT\\Q, \\QQUIZ\\Q)
 DomainInfo="REPORT_TARGET","ENUM(\QACCOUNT\Q, \QQUIZ\Q)","通報対象"
+Domain=ACTIVITY_TYPE=ENUM(\\QCOMMENT\\Q, \\QLIKE\\Q, \\QFOLLOW\\Q, \\QNEW_POST\\Q, \\QCOMMENT_LIKE\\Q)
+DomainInfo="ACTIVITY_TYPE","ENUM(\QCOMMENT\Q, \QLIKE\Q, \QFOLLOW\Q, \QNEW_POST\Q, \QCOMMENT_LIKE\Q)","アクティビティ種別"
 LogicalView=1
 DecodeDomain=0
 ViewModePageIndividually=1
@@ -57,7 +61,7 @@ PName=t_account
 LName=アカウント
 Comment=
 TableOption=
-Page=MAIN
+Page=TABLE
 Left=1100
 Top=600
 Field="アカウントID","account_id","INT(10)","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
@@ -79,7 +83,7 @@ EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20191123184610
-Position="MAIN",1100,600
+Position="TABLE",1100,600
 ZOrder=0
 
 [Entity]
@@ -87,7 +91,7 @@ PName=t_charge_log
 LName=課金ログ
 Comment=
 TableOption=
-Page=MAIN
+Page=TABLE
 Left=700
 Top=100
 Field="課金ログID","charge_log_id","BIGINT","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
@@ -97,7 +101,7 @@ EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20191123164616
-Position="MAIN",700,100
+Position="TABLE",700,100
 ZOrder=1
 
 [Entity]
@@ -105,7 +109,7 @@ PName=t_follow
 LName=フォロー
 Comment=
 TableOption=ENGINE=InnoDB DEFAULT CHARSET=utf8
-Page=MAIN
+Page=TABLE
 Left=600
 Top=600
 Field="フォローID","follow_id","BIGINT","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
@@ -116,7 +120,7 @@ EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20190415220449
-Position="MAIN",600,600
+Position="TABLE",600,600
 ZOrder=2
 
 [Entity]
@@ -124,7 +128,7 @@ PName=t_group
 LName=グループ
 Comment=
 TableOption=
-Page=MAIN
+Page=TABLE
 Left=100
 Top=800
 Field="グループID","group_id","INT(10)","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
@@ -138,7 +142,7 @@ EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20191123215418
-Position="MAIN",100,800
+Position="TABLE",100,800
 ZOrder=3
 
 [Entity]
@@ -146,7 +150,7 @@ PName=t_group_member
 LName=グループメンバー
 Comment=
 TableOption=
-Page=MAIN
+Page=TABLE
 Left=600
 Top=900
 Field="グループメンバーID","group_member_id","BIGINT(10)","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
@@ -157,7 +161,7 @@ EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20191123161429
-Position="MAIN",600,900
+Position="TABLE",600,900
 ZOrder=4
 
 [Entity]
@@ -165,7 +169,7 @@ PName=t_quiz
 LName=クイズ
 Comment=
 TableOption=
-Page=MAIN
+Page=TABLE
 Left=1800
 Top=500
 Field="クイズID","quiz_id","BIGINT","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
@@ -181,7 +185,7 @@ EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20191123185521
-Position="MAIN",1800,500
+Position="TABLE",1800,500
 ZOrder=5
 
 [Entity]
@@ -189,7 +193,7 @@ PName=t_quiz_like
 LName=クイズいいね
 Comment=
 TableOption=
-Page=MAIN
+Page=TABLE
 Left=1600
 Top=900
 Field="クイズいいねID","quiz_like_id","BIGINT","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
@@ -200,7 +204,7 @@ EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20191123184908
-Position="MAIN",1600,900
+Position="TABLE",1600,900
 ZOrder=6
 
 [Entity]
@@ -208,7 +212,7 @@ PName=t_ban_report
 LName=通報
 Comment=
 TableOption=
-Page=MAIN
+Page=TABLE
 Left=1300
 Top=100
 Field="通報ID","report_id","INT(10)","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
@@ -223,7 +227,7 @@ EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20191123210115
-Position="MAIN",1300,100
+Position="TABLE",1300,100
 ZOrder=7
 
 [Relation]
@@ -235,7 +239,7 @@ Fields1=group_id
 Fields2=group_id
 Cardinarity1=
 Cardinarity2=
-Position="MAIN",0,2687,7313,3046,R,R
+Position="TABLE",0,2687,7313,3046,R,R
 Dependence=0
 Caption=
 PName=
@@ -256,7 +260,7 @@ Fields1=account_id
 Fields2=account_id
 Cardinarity1=
 Cardinarity2=
-Position="MAIN",0,2687,7313,1889,R,R
+Position="TABLE",0,2687,7313,1889,R,R
 Dependence=0
 Caption=
 PName=
@@ -277,7 +281,7 @@ Fields1=account_id
 Fields2=account_id
 Cardinarity1=
 Cardinarity2=
-Position="MAIN",0,721,9279,1857,R,R
+Position="TABLE",0,721,9279,1857,R,R
 Dependence=0
 Caption=
 PName=
@@ -298,7 +302,7 @@ Fields1=account_id
 Fields2=account_id
 Cardinarity1=
 Cardinarity2=
-Position="MAIN",0,1210,8790,1889,R,R
+Position="TABLE",0,1210,8790,1889,R,R
 Dependence=0
 Caption=
 PName=
@@ -319,7 +323,7 @@ Fields1=quiz_id
 Fields2=quiz_id
 Cardinarity1=
 Cardinarity2=
-Position="MAIN",0,2329,7671,2304,R,R
+Position="TABLE",0,2329,7671,2304,R,R
 Dependence=0
 Caption=
 PName=
@@ -340,7 +344,7 @@ Fields1=account_id
 Fields2=account_id
 Cardinarity1=
 Cardinarity2=
-Position="MAIN",0,2329,7671,1852,R,R
+Position="TABLE",0,2329,7671,1852,R,R
 Dependence=0
 Caption=
 PName=
@@ -361,7 +365,7 @@ Fields1=quiz_id
 Fields2=quiz_id
 Cardinarity1=
 Cardinarity2=
-Position="MAIN",0,3419,6581,3484,R,R
+Position="TABLE",0,3419,6581,3484,R,R
 Dependence=0
 Caption=
 PName=
@@ -382,7 +386,7 @@ Fields1=account_id
 Fields2=account_id
 Cardinarity1=
 Cardinarity2=
-Position="MAIN",0,5000,5000,5000,R,R
+Position="TABLE",0,5000,5000,5000,R,R
 Dependence=0
 Caption=
 PName=
@@ -399,7 +403,7 @@ PName=t_quiz_tag
 LName=クイズタグ
 Comment=
 TableOption=
-Page=MAIN
+Page=TABLE
 Left=2100
 Top=500
 Field="タグID","quiz_tag_id","BIGINT","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
@@ -410,7 +414,7 @@ EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20191123184425
-Position="MAIN",2100,500
+Position="TABLE",2100,500
 ZOrder=16
 
 [Relation]
@@ -422,7 +426,7 @@ Fields1=quiz_id
 Fields2=quiz_id
 Cardinarity1=
 Cardinarity2=
-Position="MAIN",0,2104,7896,2198,R,R
+Position="TABLE",0,2104,7896,2198,R,R
 Dependence=0
 Caption=
 PName=
@@ -433,3 +437,60 @@ Bar3=220
 TermPos1=R
 TermPos2=R
 ZOrder=17
+
+[Entity]
+PName=t_activity
+LName=アクティビティ
+Comment=
+TableOption=ENGINE=InnoDB DEFAULT CHARSET=utf8
+Page=TABLE
+Left=800
+Top=1150
+Field="アクティビティID","activity_id","BIGINT","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
+Field="アカウントID","account_id","INT(10)","NOT NULL",,"","",$FFFFFFFF,""
+Field="アクティビティ種別","activity_type","*ACTIVITY_TYPE","NOT NULL",,"","",$FFFFFFFF,""
+Field="クイズID","quiz_id","BIGINT",,,"","",$FFFFFFFF,""
+Field="フォローアカウントID","follow_account_id","INT(10)",,,"","",$FFFFFFFF,""
+Index==0,account_id
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20191124110539
+Position="TABLE",800,1150
+ZOrder=18
+
+[Relation]
+Entity1=t_account
+Entity2=t_activity
+RelationType1=2
+RelationType2=3
+Fields1=account_id
+Fields2=account_id
+Cardinarity1=
+Cardinarity2=
+Position="TABLE",0,2199,7801,2950,R,R
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=220
+Bar2=780
+Bar3=295
+TermPos1=R
+TermPos2=R
+ZOrder=19
+
+[View]
+PName=v_follow
+LName=フォロービュー
+Comment=
+ViewOption=
+Query=SELECT\n  tFollow.follow_id\n  , tFollow.block_flag\n  , tFollow.account_id as follow_account_id\n  , tFollow.follow_account_id as follower_account_id\n  , tFollowAccount.login_id as follow_login_id\n  , tFollowAccount.name as follow_name\n  , tFollowAccount.description as follow_description\n  , tFollowAccount.img_url as follow_img_url\n  , tFollowerAccount.login_id as follower_login_id\n  , tFollowerAccount.name as follower_name\n  , tFollowerAccount.description as follower_description\n  , tFollowerAccount.img_url as follower_img_url\nFROM\n  t_follow as tFollow \n  inner join t_account as tFollowAccount \n    on tFollow.account_id = tFollowAccount.account_id \n    and tFollowAccount.deleted = \q0\q\n  inner join t_account as tFollowerAccount \n    on tFollow.follow_account_id = tFollowerAccount.account_id \n    and tFollowerAccount.deleted = \q0\q\nWHERE\n  tFollow.deleted = \q0\q\n\n
+LNameByComment=1
+Color=$000000
+BkColor=$FFFFFF
+Position="View",1000,200
+ZOrder=20
+Page=View
+Left=1000
+Top=200
