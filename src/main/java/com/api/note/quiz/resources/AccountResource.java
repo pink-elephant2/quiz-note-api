@@ -18,7 +18,7 @@ public class AccountResource {
 
 	/** アカウントID */
 	@JsonProperty("id")
-	private Long accountId;
+	private Integer accountId;
 
 	/** ログインID */
 	private String loginId;

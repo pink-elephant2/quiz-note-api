@@ -65,7 +65,7 @@ public class FollowServiceImpl implements FollowService {
 
 		return page.map(vfollow -> {
 			AccountResource resource = mapper.map(vfollow, AccountResource.class);
-			resource.setAccountId((long) vfollow.getFollowerAccountId());
+			resource.setAccountId(vfollow.getFollowerAccountId());
 			resource.setLoginId(vfollow.getFollowerLoginId());
 			resource.setName(vfollow.getFollowerName());
 			resource.setDescription(vfollow.getFollowerDescription());
@@ -93,7 +93,7 @@ public class FollowServiceImpl implements FollowService {
 
 		return page.map(vfollow -> {
 			AccountResource resource = mapper.map(vfollow, AccountResource.class);
-			resource.setAccountId((long) vfollow.getFollowAccountId());
+			resource.setAccountId(vfollow.getFollowAccountId());
 			resource.setLoginId(vfollow.getFollowLoginId());
 			resource.setName(vfollow.getFollowName());
 			resource.setDescription(vfollow.getFollowDescription());

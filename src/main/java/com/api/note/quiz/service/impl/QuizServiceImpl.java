@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -85,7 +84,7 @@ public class QuizServiceImpl implements QuizService {
 		example.createCriteria().andQuizCdEqualTo(cd).andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
 		TQuiz quiz = tQuizRepository.findOneBy(example);
 		if (quiz == null) {
-			 throw new NotFoundException("クイズが存在しません");
+			throw new NotFoundException("クイズが存在しません");
 		}
 
 		QuizResource resource = mapper.map(quiz, QuizResource.class);
@@ -127,20 +126,15 @@ public class QuizServiceImpl implements QuizService {
 	@Override
 	public Page<QuizResource> findList(String loginId, Pageable pageable) {
 		TQuizExample example = new TQuizExample();
-		if (!StringUtils.isEmpty(loginId)) {
-			// 指定されたユーザーのクイズ一覧
-			Integer accountId = tAccountRepository.findOneByLoginId(loginId).getAccountId();
-			example.createCriteria().andAccountIdEqualTo(accountId).andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
-		} else {
-			example.createCriteria().andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
-		}
+
+		// 指定されたユーザーのクイズ一覧
+		AccountResource account = mapper.map(tAccountRepository.findOneByLoginId(loginId), AccountResource.class);
+		example.createCriteria().andAccountIdEqualTo(account.getAccountId())
+				.andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
+
 		return tQuizRepository.findPageBy(example, pageable).map(tQuiz -> {
 			QuizResource resource = mapper.map(tQuiz, QuizResource.class);
-
-			// TODO 投稿ユーザー View または キャッシュ
-			resource.setAccount(
-					mapper.map(tAccountRepository.findOneById(tQuiz.getAccountId()), AccountResource.class));
-
+			resource.setAccount(account);
 			return resource;
 		});
 	}
