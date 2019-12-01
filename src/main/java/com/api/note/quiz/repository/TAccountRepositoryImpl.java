@@ -6,22 +6,23 @@ import org.springframework.stereotype.Repository;
 import com.api.note.quiz.consts.CommonConst;
 import com.api.note.quiz.domain.TAccount;
 import com.api.note.quiz.domain.TAccountExample;
+import com.api.note.quiz.exception.NotFoundException;
 
 @Primary
 @Repository
 public class TAccountRepositoryImpl implements TAccountRepository {
-    private TAccountMapper tAccountMapper;
+	private TAccountMapper tAccountMapper;
 
-    public TAccountRepositoryImpl(TAccountMapper tAccountMapper) {
-        this.tAccountMapper = tAccountMapper;
-    }
+	public TAccountRepositoryImpl(TAccountMapper tAccountMapper) {
+		this.tAccountMapper = tAccountMapper;
+	}
 
-    @Override
-    public TAccountMapper getMapper() {
-        return this.tAccountMapper;
-    }
+	@Override
+	public TAccountMapper getMapper() {
+		return this.tAccountMapper;
+	}
 
-    /**
+	/**
 	 * アカウントIDで検索
 	 *
 	 * @param accountId アカウントID
@@ -43,7 +44,10 @@ public class TAccountRepositoryImpl implements TAccountRepository {
 	public TAccount findOneByLoginId(String loginId) {
 		TAccountExample example = new TAccountExample();
 		example.createCriteria().andLoginIdEqualTo(loginId).andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
-		// TODO エラー
-		return findOneBy(example);
+		TAccount account = findOneBy(example);
+		if (account == null) {
+			throw new NotFoundException("写真が存在しません");
+		}
+		return account;
 	}
 }

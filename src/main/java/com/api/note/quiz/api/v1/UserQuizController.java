@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.api.note.quiz.aop.SessionInfoContextHolder;
 import com.api.note.quiz.form.QuizForm;
 import com.api.note.quiz.resources.QuizResource;
 import com.api.note.quiz.service.QuizService;
@@ -54,10 +55,10 @@ public class UserQuizController {
 	 */
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public Page<QuizResource> findList(String loginId, @SortDefault.SortDefaults({
+	public Page<QuizResource> findList(@SortDefault.SortDefaults({
 			@SortDefault(sort = "quiz_id", direction = Direction.DESC) }) Pageable pageable) {
 		// クイズ一覧を取得する
-		return quizService.findList(loginId, pageable);
+		return quizService.findList(SessionInfoContextHolder.getSessionInfo().getLoginId(), pageable);
 	}
 
 	/**
@@ -73,7 +74,6 @@ public class UserQuizController {
 		// クイズを登録し、登録内容を返却する
 		return quizService.create(form);
 	}
-
 
 	/**
 	 * クイズ更新
