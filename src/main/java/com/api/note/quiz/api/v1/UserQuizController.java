@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -70,7 +71,7 @@ public class UserQuizController {
 	 */
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public QuizResource create(@Validated QuizForm form) {
+	public QuizResource create(@RequestBody @Validated QuizForm form) {
 		// クイズを登録し、登録内容を返却する
 		return quizService.create(form);
 	}
@@ -84,7 +85,7 @@ public class UserQuizController {
 	 */
 	@PutMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public QuizResource update(@Validated QuizForm form) {
+	public QuizResource update(@RequestBody @Validated QuizForm form) {
 		// クイズを更新し、登録内容を返却する
 		return quizService.create(form); // TODO 実装
 	}

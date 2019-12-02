@@ -22,6 +22,18 @@ public class QuizResource {
 	@JsonProperty("id")
 	private Long quizId;
 
+	/** 問題 */
+	private String question;
+
+	/** 答え */
+	private String answer;
+
+	/** ヒント */
+	private String hint;
+
+	/** 解説 */
+	private String explanation;
+
 	/** 投稿日時 */
 	private Date createdAt;
 
