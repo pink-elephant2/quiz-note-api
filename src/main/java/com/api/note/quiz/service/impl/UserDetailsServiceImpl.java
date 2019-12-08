@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.api.note.quiz.domain.TAccount;
+import com.api.note.quiz.exception.NotFoundException;
 import com.api.note.quiz.repository.TAccountRepository;
 import com.api.note.quiz.resources.SessionInfoResource;
 
@@ -28,10 +29,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
 		// DB検索
-		TAccount account = tAccountRepository.findOneByLoginId(loginId);
+		try {
+			TAccount account = tAccountRepository.findOneByLoginId(loginId);
 
-		if (account != null) {
-			return new User(loginId, account.getPassword(), AuthorityUtils.createAuthorityList("ROLE_USER"));
+			if (account != null) {
+				return new User(loginId, account.getPassword(), AuthorityUtils.createAuthorityList("ROLE_USER"));
+			}
+		} catch (NotFoundException e) {
+
 		}
 		throw new UsernameNotFoundException("not found : " + loginId);
 	}

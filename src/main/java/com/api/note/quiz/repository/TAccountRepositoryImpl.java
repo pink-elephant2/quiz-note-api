@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.api.note.quiz.consts.CommonConst;
 import com.api.note.quiz.domain.TAccount;
 import com.api.note.quiz.domain.TAccountExample;
-import com.api.note.quiz.exception.NotFoundException;
 
 @Primary
 @Repository
@@ -44,10 +43,7 @@ public class TAccountRepositoryImpl implements TAccountRepository {
 	public TAccount findOneByLoginId(String loginId) {
 		TAccountExample example = new TAccountExample();
 		example.createCriteria().andLoginIdEqualTo(loginId).andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
-		TAccount account = findOneBy(example);
-		if (account == null) {
-			throw new NotFoundException("写真が存在しません");
-		}
-		return account;
+		// TODO エラー
+		return findOneBy(example);
 	}
 }
