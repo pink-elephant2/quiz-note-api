@@ -19,12 +19,4 @@ public class AccountUpdateForm {
 	/** 自己紹介 */
 	@Size(max = 120)
 	private String description;
-
-	/** 場所 */
-	@Size(max = 30)
-	private String place;
-
-	/** ウェブサイト */
-	@Size(max = 100)
-	private String url;
 }
