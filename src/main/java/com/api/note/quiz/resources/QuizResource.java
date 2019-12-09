@@ -22,6 +22,10 @@ public class QuizResource {
 	@JsonProperty("id")
 	private Long quizId;
 
+	/** CD */
+	@JsonProperty("cd")
+	private String quizCd;
+
 	/** 問題 */
 	private String question;
 

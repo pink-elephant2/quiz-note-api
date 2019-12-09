@@ -8,6 +8,7 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -122,7 +123,7 @@ public class UserQuizController {
 	 * @param cd
 	 *            コード
 	 */
-	@PostMapping("/{cd}/remove")
+	@DeleteMapping("/{cd}")
 	@ResponseStatus(HttpStatus.CREATED)
 	public boolean remove(@PathVariable("cd") String cd) {
 		// クイズを削除する
