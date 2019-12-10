@@ -1,8 +1,10 @@
 # quiz-note-api
 
+## API一覧
+
 | API名 | メソッド | URI | 認証必須 |
 ----|----|----|----
-| ヘルスチェックAPI						| GET		| /api/v1/									| - |
+| ヘルスチェックAPI						| GET		| /api/v1/status							| - |
 | アカウント登録API						| POST		| /api/v1/account							| - |
 | アカウント取得API						| GET		| /api/v1/account/{loginId}					| - |
 | アカウント更新API						| POST		| /api/v1/user/{loginId}/account/profile	| ○ |
@@ -12,7 +14,7 @@
 | アクティビティ取得API					| GET		| /api/v1/user/{loginId}/me					| ○ |
 | フォローワーアクティビティ取得API		| GET		| /api/v1/user/{loginId}/following			| ○ |
 | ログインAPI							| POST		| /api/v1/login								| - |
-| ログアウトAPI							| POST		| /api/v1/logout							| - |
+| ログアウトAPI							| POST		| /api/v1/logout							| ○ |
 | お問合せ登録API						| POST		| /api/v1/contact							| - |
 | フォロー取得API						| GET		| /api/v1/account/{loginId}/follow			| - |
 | フォローワー取得API					| GET		| /api/v1/account/{loginId}/follower		| - |
