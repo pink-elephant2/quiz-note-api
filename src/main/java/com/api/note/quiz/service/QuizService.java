@@ -4,7 +4,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.api.note.quiz.enums.ReportReasonEnum;
-import com.api.note.quiz.form.QuizForm;
+import com.api.note.quiz.form.QuizCreateForm;
+import com.api.note.quiz.form.QuizUpdateForm;
 import com.api.note.quiz.resources.QuizResource;
 
 /**
@@ -39,7 +40,16 @@ public interface QuizService {
 	 *            クイズフォーム
 	 * @return クイズ情報
 	 */
-	public QuizResource create(QuizForm form);
+	public QuizResource create(QuizCreateForm form);
+
+	/**
+	 * クイズを更新する
+	 *
+	 * @param form
+	 *            クイズフォーム
+	 * @return クイズ情報
+	 */
+	public QuizResource update(QuizUpdateForm form);
 
 	/**
 	 * クイズにいいねをする/解除する

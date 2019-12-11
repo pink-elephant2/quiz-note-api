@@ -28,7 +28,8 @@ import com.api.note.quiz.enums.ActivityTypeEnum;
 import com.api.note.quiz.enums.ReportReasonEnum;
 import com.api.note.quiz.enums.ReportTargetEnum;
 import com.api.note.quiz.exception.NotFoundException;
-import com.api.note.quiz.form.QuizForm;
+import com.api.note.quiz.form.QuizCreateForm;
+import com.api.note.quiz.form.QuizUpdateForm;
 import com.api.note.quiz.repository.TAccountRepository;
 import com.api.note.quiz.repository.TActivityRepository;
 import com.api.note.quiz.repository.TBanReportRepository;
@@ -147,7 +148,7 @@ public class QuizServiceImpl implements QuizService {
 	 * @return クイズ情報
 	 */
 	@Override
-	public QuizResource create(QuizForm form) {
+	public QuizResource create(QuizCreateForm form) {
 		// 新規クイズ
 		String cd = RandomStringUtils.randomAlphanumeric(10);
 
@@ -165,6 +166,28 @@ public class QuizServiceImpl implements QuizService {
 		// 戻り値
 		QuizResource resource = mapper.map(quiz, QuizResource.class);
 		return resource;
+	}
+
+	/**
+	 * クイズを更新する
+	 *
+	 * @param form
+	 *            クイズフォーム
+	 * @return クイズ情報
+	 */
+	@Override
+	public QuizResource update(QuizUpdateForm form) {
+		// クイズを取得
+		TQuiz quiz = tQuizRepository.findOneByCd(form.getCd());
+
+		// 更新
+		TQuizExample example = new TQuizExample();
+		example.createCriteria()
+				.andQuizIdEqualTo(quiz.getQuizId())
+				.andAccountIdEqualTo(SessionInfoContextHolder.getSessionInfo().getAccountId())
+				.andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
+		tQuizRepository.updatePartiallyBy(mapper.map(form, TQuiz.class), example);
+		return mapper.map(form, QuizResource.class);
 	}
 
 	/**

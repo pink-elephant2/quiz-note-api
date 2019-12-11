@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.note.quiz.aop.SessionInfoContextHolder;
-import com.api.note.quiz.form.QuizForm;
+import com.api.note.quiz.form.QuizCreateForm;
+import com.api.note.quiz.form.QuizUpdateForm;
 import com.api.note.quiz.resources.QuizResource;
 import com.api.note.quiz.service.QuizService;
 
@@ -72,7 +73,7 @@ public class UserQuizController {
 	 */
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public QuizResource create(@RequestBody @Validated QuizForm form) {
+	public QuizResource create(@RequestBody @Validated QuizCreateForm form) {
 		// クイズを登録し、登録内容を返却する
 		return quizService.create(form);
 	}
@@ -86,9 +87,9 @@ public class UserQuizController {
 	 */
 	@PutMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public QuizResource update(@RequestBody @Validated QuizForm form) {
+	public QuizResource update(@RequestBody @Validated QuizUpdateForm form) {
 		// クイズを更新し、登録内容を返却する
-		return quizService.create(form); // TODO 実装
+		return quizService.update(form);
 	}
 
 	/**

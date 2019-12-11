@@ -6,10 +6,10 @@ import javax.validation.constraints.Size;
 import lombok.Data;
 
 /**
- * クイズフォーム
+ * クイズ登録フォーム
  */
 @Data
-public class QuizForm {
+public class QuizCreateForm {
 
 	/** 問題 */
 	@NotNull
