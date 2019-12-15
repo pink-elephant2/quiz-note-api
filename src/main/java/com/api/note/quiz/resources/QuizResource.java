@@ -38,6 +38,9 @@ public class QuizResource {
 	/** 解説 */
 	private String explanation;
 
+	/** 音声パス */
+	private String soundUrl;
+
 	/** 投稿日時 */
 	private Date createdAt;
 
