@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.note.quiz.aop.SessionInfoContextHolder;
 import com.api.note.quiz.form.QuizCreateForm;
+import com.api.note.quiz.form.QuizSoundForm;
 import com.api.note.quiz.form.QuizUpdateForm;
 import com.api.note.quiz.resources.QuizResource;
 import com.api.note.quiz.service.QuizService;
@@ -90,6 +91,20 @@ public class UserQuizController {
 	public QuizResource update(@RequestBody @Validated QuizUpdateForm form) {
 		// クイズを更新し、登録内容を返却する
 		return quizService.update(form);
+	}
+
+	/**
+	 * 問読み登録
+	 *
+	 * @param form
+	 *            クイズフォーム
+	 * @return クイズ情報
+	 */
+	@PostMapping("/{cd}/sound")
+	@ResponseStatus(HttpStatus.CREATED)
+	public QuizResource updateSound(@PathVariable("cd") String cd, @Validated QuizSoundForm form) {
+		// クイズを更新し、登録内容を返却する
+		return quizService.updateSound(form);
 	}
 
 	/**

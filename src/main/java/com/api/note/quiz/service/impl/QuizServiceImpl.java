@@ -25,10 +25,12 @@ import com.api.note.quiz.domain.TQuizExample;
 import com.api.note.quiz.domain.TQuizLike;
 import com.api.note.quiz.domain.TQuizLikeExample;
 import com.api.note.quiz.enums.ActivityTypeEnum;
+import com.api.note.quiz.enums.DocumentTypeEnum;
 import com.api.note.quiz.enums.ReportReasonEnum;
 import com.api.note.quiz.enums.ReportTargetEnum;
 import com.api.note.quiz.exception.NotFoundException;
 import com.api.note.quiz.form.QuizCreateForm;
+import com.api.note.quiz.form.QuizSoundForm;
 import com.api.note.quiz.form.QuizUpdateForm;
 import com.api.note.quiz.repository.TAccountRepository;
 import com.api.note.quiz.repository.TActivityRepository;
@@ -188,6 +190,28 @@ public class QuizServiceImpl implements QuizService {
 				.andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
 		tQuizRepository.updatePartiallyBy(mapper.map(form, TQuiz.class), example);
 		return mapper.map(form, QuizResource.class);
+	}
+
+	/**
+	 * 問読みを更新する
+	 *
+	 * @param form
+	 *            クイズフォーム
+	 * @return クイズ情報
+	 */
+	public QuizResource updateSound(QuizSoundForm form) {
+		// クイズを取得
+		TQuiz quiz = tQuizRepository.findOneByCd(form.getCd());
+
+		// S3に保存、URLを設定する
+		String fileName = form.getCd() + ".wav"; // TODO ファイル拡張子
+		String filePath = s3Service.upload(DocumentTypeEnum.SOUND, fileName, form.getUpfile());
+
+		// レコード更新
+		quiz.setSoundUrl(filePath);
+		tQuizRepository.updatePartially(quiz);
+
+		return mapper.map(quiz, QuizResource.class);
 	}
 
 	/**
