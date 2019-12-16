@@ -24,7 +24,8 @@
 | クイズ登録API							| POST		| /api/v1/user/{loginId}/quiz				| ○ |
 | クイズ更新API							| PUT		| /api/v1/user/{loginId}/quiz				| ○ |
 | クイズ削除API							| DELETE	| /api/v1/user/{loginId}/quiz				| ○ |
-| クイズ通報API							| POST		| /api/v1/quiz/{cd}/report					| - |
+| 問読み登録API							| POST		| /api/v1/user/{loginId}/quiz/{cd}/sound	| ○ |
+| 通報API								| POST		| /api/v1/quiz/{cd}/report					| - |
 | いいねAPI								| POST		| /api/v1/user/{loginId}/quiz/{cd}/like		| ○ |
 | いいね解除API							| POST		| /api/v1/user/{loginId}/quiz/{cd}/dislike	| ○ |
 
