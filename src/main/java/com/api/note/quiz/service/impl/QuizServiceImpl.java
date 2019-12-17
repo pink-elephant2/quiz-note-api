@@ -1,5 +1,6 @@
 package com.api.note.quiz.service.impl;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -203,14 +204,22 @@ public class QuizServiceImpl implements QuizService {
 		// クイズを取得
 		TQuiz quiz = tQuizRepository.findOneByCd(form.getCd());
 
-		// S3に保存、URLを設定する
-		String fileName = form.getCd() + ".wav"; // TODO ファイル拡張子
-		String filePath = s3Service.upload(DocumentTypeEnum.SOUND, fileName, form.getUpfile());
+		try {
+			// ランダム文字列発行
+			String cd = RandomStringUtils.randomAlphanumeric(10);
 
-		// レコード更新
-		quiz.setSoundUrl(filePath);
-		tQuizRepository.updatePartially(quiz);
+			// S3に保存、URLを設定する
+			String fileName = form.getCd() + "/" + cd + ".wav"; // TODO ファイル拡張子
+			String filePath = s3Service.upload(DocumentTypeEnum.SOUND, fileName, form.getUpfile());
 
+			// レコード更新
+			quiz.setSoundUrl(filePath);
+			tQuizRepository.updatePartially(quiz);
+
+		} catch (IOException e) {
+			e.printStackTrace(); // TODO エラー処理
+			return null;
+		}
 		return mapper.map(quiz, QuizResource.class);
 	}
 
