@@ -40,7 +40,7 @@ public class S3ServiceImpl implements S3Service {
 	@Override
 	public String upload(DocumentTypeEnum documentType, String fileName, MultipartFile inputFile) throws IOException {
 		String filePath = createFilePath(documentType, fileName);
-		amazonS3.putObject(createRequest(filePath, inputFile.getBytes()));
+		amazonS3.putObject(createRequest("assets/" + filePath, inputFile.getBytes()));
 
 		return appConfig.getCloudHostUrl() + "/" + filePath;
 	}
@@ -75,6 +75,6 @@ public class S3ServiceImpl implements S3Service {
 	 * @return ファイルパス
 	 */
 	private String createFilePath(DocumentTypeEnum documentType, String fileName) {
-		return "assets/" + documentType.getUploadPath() + "/" + fileName;
+		return documentType.getUploadPath() + "/" + fileName;
 	}
 }
