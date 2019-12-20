@@ -75,6 +75,6 @@ public class S3ServiceImpl implements S3Service {
 	 * @return ファイルパス
 	 */
 	private String createFilePath(DocumentTypeEnum documentType, String fileName) {
-		return documentType.getUploadPath() + "/" + fileName;
+		return "assets/" + documentType.getUploadPath() + "/" + fileName;
 	}
 }

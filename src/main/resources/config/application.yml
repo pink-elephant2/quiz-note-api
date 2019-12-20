@@ -13,7 +13,7 @@ spring:
       table-name: t_session
 
 quiz:
-  cloud-host-url: https://div8ypzsn1tr9.cloudfront.net
+  cloud-host-url: ${QUIZ_NOTE_CLOUD_HOST_URL:https://cdn.quiz-note.com}
   s3-access-key: ${QUIZ_NOTE_S3_ACCESS_KEY:}
   s3-secret-key: ${QUIZ_NOTE_S3_SECRET_KEY:}
   s3-service-end-point: https://s3-ap-northeast-1.amazonaws.com
