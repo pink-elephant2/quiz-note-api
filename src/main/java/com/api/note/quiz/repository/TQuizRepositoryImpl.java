@@ -53,4 +53,13 @@ public class TQuizRepositoryImpl implements TQuizRepository {
 		}
 		return quiz;
 	}
+
+	/**
+	 * レコードを登録してIDを返却する
+	 */
+	@Override
+	public Long createReturnId(TQuiz tQuiz) {
+		this.beforeInsert(tQuiz);
+		return tQuizMapper.insertReturnId(tQuiz);
+	}
 }

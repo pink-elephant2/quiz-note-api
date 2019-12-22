@@ -6,4 +6,9 @@ import com.api.note.quiz.domain.TQuizExample;
 import com.api.note.quiz.domain.TQuizKey;
 
 public interface TQuizMapper extends BaseMapper<TQuizKey, TQuiz, TQuizExample> {
+
+	/**
+	 * レコードを登録してIDを返却する
+	 */
+	public Long insertReturnId(TQuiz tQuiz);
 }

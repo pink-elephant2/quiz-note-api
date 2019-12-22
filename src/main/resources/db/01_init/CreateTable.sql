@@ -1,5 +1,5 @@
 -- Project Name : みんなのクイズ手帳
--- Date/Time    : 2019/11/24 14:03:30
+-- Date/Time    : 2019/12/22 17:16:19
 -- Author       : c5apple
 -- RDBMS Type   : MySQL
 -- Application  : A5:SQL Mk-2
@@ -121,8 +121,6 @@ create table t_quiz_tag (
   , updated_by VARCHAR(30) not null comment '更新者'
   , constraint t_quiz_tag_PKC primary key (quiz_tag_id)
 ) comment 'クイズタグ' ;
-
-alter table t_quiz_tag add unique name (name) ;
 
 -- アカウント
 drop table if exists t_account cascade;

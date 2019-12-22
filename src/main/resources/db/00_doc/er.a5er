@@ -411,11 +411,10 @@ Top=500
 Field="タグID","quiz_tag_id","BIGINT","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
 Field="クイズID","quiz_id","BIGINT","NOT NULL",,"","",$FFFFFFFF,""
 Field="タグ名","name","VARCHAR(50)","NOT NULL",,"","",$FFFFFFFF,""
-Index=name=2,name 
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-ModifiedDateTime=20191123184425
+ModifiedDateTime=20191222171557
 Position="TABLE",2100,500
 ZOrder=16
 
@@ -491,8 +490,8 @@ Query=SELECT\n  tFollow.follow_id\n  , tFollow.block_flag\n  , tFollow.account_i
 LNameByComment=1
 Color=$000000
 BkColor=$FFFFFF
-Position="View",1000,200
+Position="VIEW",1000,200
 ZOrder=20
-Page=View
+Page=VIEW
 Left=1000
 Top=200

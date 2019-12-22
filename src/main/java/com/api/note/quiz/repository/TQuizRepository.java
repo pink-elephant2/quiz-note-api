@@ -21,4 +21,8 @@ public interface TQuizRepository extends BaseRepository<TQuizKey, TQuiz, TQuizEx
 	 */
 	public TQuiz findOneByCd(String quizCd);
 
+	/**
+	 * レコードを登録してIDを返却する
+	 */
+	public Long createReturnId(TQuiz tQuiz);
 }

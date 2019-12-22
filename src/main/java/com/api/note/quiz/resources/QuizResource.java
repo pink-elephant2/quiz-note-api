@@ -1,6 +1,7 @@
 package com.api.note.quiz.resources;
 
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -40,6 +41,9 @@ public class QuizResource {
 
 	/** 音声パス */
 	private String soundUrl;
+
+	/** タグ */
+	private List<String> tags;
 
 	/** 投稿日時 */
 	private Date createdAt;

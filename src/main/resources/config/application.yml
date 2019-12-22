@@ -11,6 +11,11 @@ spring:
     store-type: jdbc
     jdbc:
       table-name: t_session
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 1MB
+      max-request-size: 1MB
 
 quiz:
   cloud-host-url: ${QUIZ_NOTE_CLOUD_HOST_URL:https://cdn.quiz-note.com}

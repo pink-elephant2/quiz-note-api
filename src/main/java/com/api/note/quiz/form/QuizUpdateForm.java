@@ -1,5 +1,7 @@
 package com.api.note.quiz.form;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -33,4 +35,7 @@ public class QuizUpdateForm {
 	/** 解説 */
 	@Size(max = 100)
 	private String explanation;
+
+	/** タグ */
+	private List<String> tags;
 }

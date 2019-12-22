@@ -1,6 +1,7 @@
 package com.api.note.quiz.service.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,7 @@ import com.api.note.quiz.domain.TQuiz;
 import com.api.note.quiz.domain.TQuizExample;
 import com.api.note.quiz.domain.TQuizLike;
 import com.api.note.quiz.domain.TQuizLikeExample;
+import com.api.note.quiz.domain.TQuizTag;
 import com.api.note.quiz.enums.ActivityTypeEnum;
 import com.api.note.quiz.enums.DocumentTypeEnum;
 import com.api.note.quiz.enums.ReportReasonEnum;
@@ -39,6 +41,7 @@ import com.api.note.quiz.repository.TBanReportRepository;
 import com.api.note.quiz.repository.TFollowRepository;
 import com.api.note.quiz.repository.TQuizLikeRepository;
 import com.api.note.quiz.repository.TQuizRepository;
+import com.api.note.quiz.repository.TQuizTagRepository;
 import com.api.note.quiz.resources.AccountResource;
 import com.api.note.quiz.resources.QuizResource;
 import com.api.note.quiz.service.QuizService;
@@ -53,6 +56,9 @@ public class QuizServiceImpl implements QuizService {
 
 	@Autowired
 	private TQuizRepository tQuizRepository;
+
+	@Autowired
+	private TQuizTagRepository tQuizTagRepository;
 
 	@Autowired
 	private TQuizLikeRepository tQuizLikeRepository;
@@ -137,7 +143,11 @@ public class QuizServiceImpl implements QuizService {
 				.andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
 
 		return tQuizRepository.findPageBy(example, pageable).map(tQuiz -> {
+			// タグを取得 TODO 性能改善
+			List<TQuizTag> quizTagList = tQuizTagRepository.findAllByQuizId(tQuiz.getQuizId());
+
 			QuizResource resource = mapper.map(tQuiz, QuizResource.class);
+			resource.setTags(quizTagList.stream().map(TQuizTag::getName).collect(Collectors.toList()));
 			resource.setAccount(account);
 			return resource;
 		});
@@ -159,15 +169,20 @@ public class QuizServiceImpl implements QuizService {
 		TQuiz quiz = mapper.map(form, TQuiz.class);
 		quiz.setQuizCd(cd);
 		quiz.setAccountId(SessionInfoContextHolder.getSessionInfo().getAccountId());
-		tQuizRepository.create(quiz);
+		Long quizId = tQuizRepository.createReturnId(quiz);
+		quiz.setQuizId(quizId);
 
 		// TODO コードが重複した場合、ランダム文字列を再生成してリトライする
+
+		// タグを登録
+		saveTag(quiz.getQuizId(), form.getTags());
 
 		// フォローワーにアクティビティ登録
 		createActivity(quiz.getQuizId());
 
 		// 戻り値
 		QuizResource resource = mapper.map(quiz, QuizResource.class);
+		resource.setTags(form.getTags());
 		return resource;
 	}
 
@@ -190,7 +205,52 @@ public class QuizServiceImpl implements QuizService {
 				.andAccountIdEqualTo(SessionInfoContextHolder.getSessionInfo().getAccountId())
 				.andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
 		tQuizRepository.updatePartiallyBy(mapper.map(form, TQuiz.class), example);
-		return mapper.map(form, QuizResource.class);
+
+		// タグを登録
+		saveTag(quiz.getQuizId(), form.getTags());
+
+		// 戻り値
+		QuizResource resource = mapper.map(form, QuizResource.class);
+		resource.setTags(form.getTags());
+		return resource;
+	}
+
+	/**
+	 * タグを登録/更新する
+	 *
+	 * @param quizId
+	 * @param tagList
+	 */
+	private void saveTag(Long quizId, List<String> tagList) {
+		// タグを取得
+		List<TQuizTag> quizTagList = (quizId != null) ? tQuizTagRepository.findAllByQuizId(quizId) : new ArrayList<>();
+		if (quizTagList.size() < tagList.size()) {
+			// 新規登録分が多い場合
+			int n = tagList.size() - quizTagList.size();
+			for (int i = 0; i < n; i++) {
+				TQuizTag quizTag = new TQuizTag();
+				quizTag.setQuizId(quizId);
+				quizTagList.add(quizTag);
+			}
+		} else if (quizTagList.size() > tagList.size()) {
+			// 既存分が多い場合
+			for (int i = quizTagList.size(); i > tagList.size(); i--) {
+				quizTagList.get(i - 1).setDeleted(CommonConst.DeletedFlag.ON);
+				tagList.add(null);
+			}
+		}
+
+		// 登録/更新
+		for (int i = 0; i < quizTagList.size(); i++) {
+			TQuizTag quizTag = quizTagList.get(i);
+			quizTag.setName(tagList.get(i));
+
+			if (quizTag.getQuizTagId() == null) {
+				tQuizTagRepository.create(quizTag);
+			} else {
+				tQuizTagRepository.updatePartially(quizTag);
+			}
+		}
 	}
 
 	/**
