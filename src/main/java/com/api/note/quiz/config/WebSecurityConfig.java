@@ -28,10 +28,14 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.social.security.SocialUserDetailsService;
+import org.springframework.social.security.SpringSocialConfigurer;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
+import com.api.note.quiz.service.impl.SocialUserDetailsServiceImpl;
 import com.api.note.quiz.service.impl.UserDetailsServiceImpl;
 
 /**
@@ -50,13 +54,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// 認可の設定
-		http.authorizeRequests()
+		http
+				// ログイン設定
+				.formLogin().loginPage("/signin").loginProcessingUrl("/api/v1/login").usernameParameter("loginId")
+				.passwordParameter("password").successHandler(new AppAuthenticationSuccessHandler())
+				.failureHandler(new AppAuthenticationFailureHandler())
+				.and()
+				.authorizeRequests()
+				.antMatchers("/", "/webjars/**", "/admin/**", "/favicon.ico", "/resources/**", "/auth/**", "/signin/**", "/signup/**", "/disconnect/facebook").permitAll()
+				.antMatchers("/**").authenticated()
 				// 認証ページ
 				.antMatchers("/api/v1/user/**").hasRole("USER").and()
-				// ログイン設定
-				.formLogin().loginPage("/").loginProcessingUrl("/api/v1/login").usernameParameter("loginId")
-				.passwordParameter("password").successHandler(new AppAuthenticationSuccessHandler())
-				.failureHandler(new AppAuthenticationFailureHandler()).and()
 				// 認証認可失敗
 				.exceptionHandling().authenticationEntryPoint(new AppAuthenticationEntryPoint())
 				.accessDeniedHandler(new AppAccessDeniedHandler()).and()
@@ -66,7 +74,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// CSRF
 				.csrf().disable() // TODO CSRF有効にする
 				// CORS
-				.cors().configurationSource(corsConfigurationSource());
+				.cors().configurationSource(corsConfigurationSource())
+				.and()
+				.apply(new SpringSocialConfigurer());
 	}
 
 	/**
@@ -86,6 +96,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		corsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
 
 		return corsConfigurationSource;
+	}
+
+	/**
+	 * ソーシャルユーザー認証サービス
+	 */
+	@Bean
+	public SocialUserDetailsService socialUsersDetailService() {
+		return new SocialUserDetailsServiceImpl(userDetailsService);
+	}
+
+	@Bean
+	public SpringSecurityDialect springSecurityDialect() {
+		return new SpringSecurityDialect();
 	}
 
 	/**
