@@ -61,4 +61,9 @@ public interface AccountService {
 	 *            画像フォーム
 	 */
 	public boolean saveImage(AccountImageForm form);
+
+	/**
+	 * FacebookIDからアカウントを取得する
+	 */
+	public AccountResource findByFacebookId(String facebookId);
 }

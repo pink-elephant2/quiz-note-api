@@ -229,4 +229,15 @@ public class AccountServiceImpl implements AccountService {
 			return false;
 		}
 	}
+
+	/**
+	 * FacebookIDからアカウントを取得する
+	 */
+	@Override
+	public AccountResource findByFacebookId(String facebookId) {
+		// TODO 実装
+
+		System.out.println("facebookId: " + facebookId);
+		return find("my_melody");
+	}
 }

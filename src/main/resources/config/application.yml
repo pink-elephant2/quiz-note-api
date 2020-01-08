@@ -16,6 +16,11 @@ spring:
       enabled: true
       max-file-size: 1MB
       max-request-size: 1MB
+  social:
+    facebook:
+      appId: ${QUIZ_NOTE_FACEBOOK_APP_ID:}
+      appSecret: ${QUIZ_NOTE_FACEBOOK_APP_SECRET:}
+      redirectUri: ${QUIZ_NOTE_FACEBOOK_REDIRECT_URL:}
 
 quiz:
   cloud-host-url: ${QUIZ_NOTE_CLOUD_HOST_URL:https://cdn.quiz-note.com}
