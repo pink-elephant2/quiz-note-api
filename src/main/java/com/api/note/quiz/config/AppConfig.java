@@ -10,6 +10,9 @@ import lombok.Data;
 @Data
 public class AppConfig {
 
+	/** サイトURL */
+	private String url;
+
 	/** S3アクセスキー */
 	private String s3AccessKey;
 

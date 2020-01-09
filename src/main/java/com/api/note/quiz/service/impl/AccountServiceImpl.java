@@ -234,10 +234,9 @@ public class AccountServiceImpl implements AccountService {
 	 * FacebookIDからアカウントを取得する
 	 */
 	@Override
-	public AccountResource findByFacebookId(String facebookId) {
-		// TODO 実装
-
-		System.out.println("facebookId: " + facebookId);
-		return find("my_melody");
+	public TAccount findByFacebookId(String facebookId) {
+		TAccountExample example = new TAccountExample();
+		example.createCriteria().andFacebookEqualTo(facebookId).andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
+		return tAccountRepository.findOneBy(example);
 	}
 }

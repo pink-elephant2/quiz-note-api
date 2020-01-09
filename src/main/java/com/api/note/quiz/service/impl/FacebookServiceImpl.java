@@ -14,12 +14,9 @@ import com.restfb.scope.FacebookPermissions;
 import com.restfb.scope.ScopeBuilder;
 import com.restfb.types.User;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * Facebookサービス
  */
-@Slf4j
 @Service
 public class FacebookServiceImpl implements FacebookService {
 
@@ -32,18 +29,21 @@ public class FacebookServiceImpl implements FacebookService {
 	@Value("${spring.social.facebook.redirectUri}")
 	private String redirectUri;
 
+	/**
+	 * Facebook認証用URLを生成する
+	 */
 	@Override
 	public String createFacebookAuthorizationURL() {
 		ScopeBuilder scopeBuilder = new ScopeBuilder();
-		//scopeBuilder.addPermission(FacebookPermissions.PUBLIC_PROFILE);
 		scopeBuilder.addPermission(FacebookPermissions.EMAIL);
-		scopeBuilder.addPermission(FacebookPermissions.USER_GENDER);
-		//scopeBuilder.addPermission(FacebookPermissions.USER_BIRTHDAY);
 
 		FacebookClient client = getFacebookClient(null, facebookSecret);
 		return client.getLoginDialogUrl(facebookAppId, redirectUri, scopeBuilder);
 	}
 
+	/**
+	 * Facebookユーザーを取得する
+	 */
 	@Override
 	public User getFacebookUser(String code) {
 		// get accessToken
@@ -53,7 +53,7 @@ public class FacebookServiceImpl implements FacebookService {
 
 		// get details of current user
 		client = getFacebookClient(accessToken.getAccessToken(), facebookSecret);
-		User user = client.fetchObject("me", User.class, Parameter.with("fields", "id,name,email,picture,gender"));
+		User user = client.fetchObject("me", User.class, Parameter.with("fields", "id,name,email,picture"));
 
 		// get max picture
 		if (user.getPicture() != null) {
@@ -70,7 +70,6 @@ public class FacebookServiceImpl implements FacebookService {
 				}
 			}
 		}
-		log.info("facebook user info :{}", user);
 		return user;
 	}
 

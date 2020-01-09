@@ -25,6 +25,4 @@ public class RegisterUserForm implements Serializable {
     private UserType userType;
 
     private String thirdPartyId;
-
-    private String userGender;
 }
