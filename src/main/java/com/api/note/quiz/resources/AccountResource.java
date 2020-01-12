@@ -32,6 +32,9 @@ public class AccountResource {
 	/** 画像パス */ // TODO 画像情報クラス
 	private String imgUrl;
 
+	/** Facebookアカウント */
+	private String facebook;
+
 	/** Twitterアカウント */
 	private String twitter;
 
