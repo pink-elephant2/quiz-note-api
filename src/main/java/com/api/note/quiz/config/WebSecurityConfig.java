@@ -101,6 +101,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	/**
+	 * 独自ログイン
+	 */
+	@Bean
+	public AutoAuthenticationManager autoAuthenticationManager() {
+		return new AutoAuthenticationManager();
+	}
+
+	/**
 	 * パスワードハッシュ化方式
 	 */
 	@Bean

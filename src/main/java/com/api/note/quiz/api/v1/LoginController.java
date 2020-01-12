@@ -3,11 +3,8 @@ package com.api.note.quiz.api.v1;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
@@ -16,17 +13,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.api.note.quiz.aop.SessionInfoContextHolder;
 import com.api.note.quiz.config.AppConfig;
+import com.api.note.quiz.config.AutoAuthenticationManager;
 import com.api.note.quiz.domain.TAccount;
-import com.api.note.quiz.domain.TAccountExample;
 import com.api.note.quiz.enums.UserType;
 import com.api.note.quiz.exception.NotFoundException;
 import com.api.note.quiz.form.AccountCreateForm;
 import com.api.note.quiz.form.RegisterUserForm;
-import com.api.note.quiz.repository.TAccountRepository;
 import com.api.note.quiz.service.AccountService;
 import com.api.note.quiz.service.FacebookService;
 import com.restfb.types.User;
@@ -45,32 +40,7 @@ public class LoginController {
 	private AccountService accountService;
 
 	@Autowired
-	private TAccountRepository tAccountRepository;
-
-	private SampleAuthenticationManager am = null;
-
-	/** TODO もっといいやり方 */
-	class SampleAuthenticationManager implements AuthenticationManager {
-		private TAccountRepository tAccountRepository;
-
-		public SampleAuthenticationManager(TAccountRepository tAccountRepository) {
-			this.tAccountRepository = tAccountRepository;
-		}
-
-		public Authentication authenticate(Authentication auth) throws AuthenticationException {
-			TAccountExample example = new TAccountExample();
-			example.createCriteria().andLoginIdEqualTo(auth.getPrincipal().toString())
-					.andFacebookEqualTo(auth.getPrincipal().toString());
-			TAccount account = tAccountRepository.findOneBy(example);
-
-			// Facebook認証済みのため、ユーザー存在チェックのみ
-			if (account != null) {
-				return new UsernamePasswordAuthenticationToken(auth.getPrincipal(),
-						auth.getCredentials(), AuthorityUtils.createAuthorityList("ROLE_USER"));
-			}
-			throw new BadCredentialsException("Bad Credentials");
-		}
-	}
+	private AutoAuthenticationManager autoAuthenticationManager;
 
 	@Autowired
 	private FacebookService facebookService;
@@ -85,7 +55,7 @@ public class LoginController {
 		if (!SessionInfoContextHolder.isAuthenticated()) {
 			throw new NotFoundException("未ログイン");
 		}
-		return SessionInfoContextHolder.getSessionInfo().getLoginId();
+		return "\"" + SessionInfoContextHolder.getSessionInfo().getLoginId() + "\"";
 	}
 
 	/**
@@ -101,15 +71,28 @@ public class LoginController {
 	 */
 	@GetMapping("/facebook/cbk")
 	public String createFacebookAccessToken(@RequestParam(value = "code", required = false) String code,
-			@RequestParam(value = "error", required = false) String error,
-			RedirectAttributes redirectAttributes,
-			HttpServletRequest request) {
+			@RequestParam(value = "error", required = false) String error, HttpServletRequest request) {
 		if (error != null) {
 			return "redirect:" + appConfig.getUrl();
 		}
+		// Facebook認証
 		RegisterUserForm registerUser = convertRegisterUserFormByFacebookCode(code);
-		TAccount user = accountService.findByFacebookId(registerUser.getThirdPartyId());
-		return goToLoginOrRegister(redirectAttributes, request, registerUser, user);
+
+		// DBに登録されているユーザーを取得
+		TAccount account = accountService.findByFacebookId(registerUser.getThirdPartyId());
+		// TODO BANされている場合
+		if (account == null) {
+			// ユーザー登録
+			AccountCreateForm form = new AccountCreateForm();
+			form.setLoginId(registerUser.getThirdPartyId()); // TODO ログインID検討
+			form.setMail(registerUser.getUserMail());
+			form.setPassword(registerUser.getUserType().name() + "," + registerUser.getThirdPartyId() + ",USER"); // TODO 仮パスワード長すぎ
+			form.setFacebook(registerUser.getThirdPartyId());
+			accountService.create(form);
+		}
+		// ログイン
+		autoLogin(request, registerUser, account);
+		return "redirect:" + appConfig.getUrl();
 	}
 
 	private RegisterUserForm convertRegisterUserFormByFacebookCode(String code) {
@@ -124,37 +107,17 @@ public class LoginController {
 	}
 
 	/**
-	 * go to Home or register page
-	 *
-	 * @param redirectAttributes redirectAttributes
-	 * @param request            request
-	 * @param registerUser       RegisterUserForm
-	 * @param user               db user
-	 * @return String
+	 * 独自ログインする
 	 */
-	private String goToLoginOrRegister(RedirectAttributes redirectAttributes, HttpServletRequest request,
-			RegisterUserForm registerUser, TAccount user) {
-		if (user == null) {
-			// ユーザー登録
-			AccountCreateForm form = new AccountCreateForm();
-			form.setLoginId(registerUser.getThirdPartyId()); // TODO ログインID検討
-			form.setMail(registerUser.getUserMail());
-			form.setPassword(registerUser.getUserType().name() + "," + registerUser.getThirdPartyId() + ",USER"); // TODO 仮パスワード長すぎ
-			form.setFacebook(registerUser.getThirdPartyId());
-			accountService.create(form);
-		}
-		// TODO BANされている場合
-
+	private void autoLogin(HttpServletRequest request, RegisterUserForm registerUser, TAccount account) {
 		// ログイン
-		String pass = registerUser.getUserType().name() + "," + registerUser.getThirdPartyId() + ",USER";
+		String pass = account.getLoginId() + "," + account.getFacebook() + ",USER";
 		UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(
 				registerUser.getThirdPartyId(), pass, AuthorityUtils.createAuthorityList("ROLE_USER"));
 		authReq.setDetails(new WebAuthenticationDetails(request));
-		am = new SampleAuthenticationManager(tAccountRepository);
-		Authentication auth = am.authenticate(authReq);
+		Authentication auth = autoAuthenticationManager.authenticate(authReq);
 
 		SecurityContextHolder.getContext().setAuthentication(auth);
-		return "redirect:" + appConfig.getUrl();
 	}
 
 }
