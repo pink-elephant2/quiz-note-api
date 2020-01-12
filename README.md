@@ -14,7 +14,9 @@
 | アクティビティ取得API					| GET		| /api/v1/user/{loginId}/me					| ○ |
 | フォローワーアクティビティ取得API		| GET		| /api/v1/user/{loginId}/following			| ○ |
 | ログインAPI							| POST		| /api/v1/login								| - |
+| ログインチェックAPI					| GET		| /api/v1/login/check						| - |
 | ログアウトAPI							| POST		| /api/v1/logout							| ○ |
+| FacebookログインAPI					| GET		| /api/v1/login/facebook					| - |
 | お問合せ登録API						| POST		| /api/v1/contact							| - |
 | フォロー取得API						| GET		| /api/v1/account/{loginId}/follow			| - |
 | フォローワー取得API					| GET		| /api/v1/account/{loginId}/follower		| - |
