@@ -26,6 +26,9 @@ public class AccountCreateForm {
 	@Size(max = 30)
 	private String password;
 
+	/** Facebookアカウント */
+	private String facebook;
+
 	// TODO パスワードを出力しない
 //	@Override
 //	public String toString() {

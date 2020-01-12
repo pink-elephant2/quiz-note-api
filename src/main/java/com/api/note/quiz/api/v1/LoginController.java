@@ -1,28 +1,32 @@
 package com.api.note.quiz.api.v1;
 
-import java.util.ArrayList;
-
 import javax.servlet.http.HttpServletRequest;
 
-import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.openid.OpenIDAuthenticationStatus;
-import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.api.note.quiz.aop.SessionInfoContextHolder;
 import com.api.note.quiz.config.AppConfig;
 import com.api.note.quiz.domain.TAccount;
+import com.api.note.quiz.domain.TAccountExample;
 import com.api.note.quiz.enums.UserType;
+import com.api.note.quiz.exception.NotFoundException;
 import com.api.note.quiz.form.AccountCreateForm;
 import com.api.note.quiz.form.RegisterUserForm;
+import com.api.note.quiz.repository.TAccountRepository;
 import com.api.note.quiz.service.AccountService;
 import com.api.note.quiz.service.FacebookService;
 import com.restfb.types.User;
@@ -38,16 +42,51 @@ public class LoginController {
 	private AppConfig appConfig;
 
 	@Autowired
-	private Mapper mapper;
-
-	@Autowired
 	private AccountService accountService;
 
 	@Autowired
-	private AuthenticationProvider openIDAuthenticationProvider;
+	private TAccountRepository tAccountRepository;
+
+	private SampleAuthenticationManager am = null;
+
+	/** TODO もっといいやり方 */
+	class SampleAuthenticationManager implements AuthenticationManager {
+		private TAccountRepository tAccountRepository;
+
+		public SampleAuthenticationManager(TAccountRepository tAccountRepository) {
+			this.tAccountRepository = tAccountRepository;
+		}
+
+		public Authentication authenticate(Authentication auth) throws AuthenticationException {
+			TAccountExample example = new TAccountExample();
+			example.createCriteria().andLoginIdEqualTo(auth.getPrincipal().toString())
+					.andFacebookEqualTo(auth.getPrincipal().toString());
+			TAccount account = tAccountRepository.findOneBy(example);
+
+			// Facebook認証済みのため、ユーザー存在チェックのみ
+			if (account != null) {
+				return new UsernamePasswordAuthenticationToken(auth.getPrincipal(),
+						auth.getCredentials(), AuthorityUtils.createAuthorityList("ROLE_USER"));
+			}
+			throw new BadCredentialsException("Bad Credentials");
+		}
+	}
 
 	@Autowired
 	private FacebookService facebookService;
+
+	/**
+	 * ログインチェック
+	 * @return ログインID
+	 */
+	@GetMapping("/check")
+	@ResponseBody
+	public String check() {
+		if (!SessionInfoContextHolder.isAuthenticated()) {
+			throw new NotFoundException("未ログイン");
+		}
+		return SessionInfoContextHolder.getSessionInfo().getLoginId();
+	}
 
 	/**
 	 * Facebookログイン
@@ -66,9 +105,8 @@ public class LoginController {
 			RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
 		if (error != null) {
-			return "redirect:/login";
+			return "redirect:" + appConfig.getUrl();
 		}
-		System.out.println("code: " + code);
 		RegisterUserForm registerUser = convertRegisterUserFormByFacebookCode(code);
 		TAccount user = accountService.findByFacebookId(registerUser.getThirdPartyId());
 		return goToLoginOrRegister(redirectAttributes, request, registerUser, user);
@@ -102,21 +140,20 @@ public class LoginController {
 			form.setLoginId(registerUser.getThirdPartyId()); // TODO ログインID検討
 			form.setMail(registerUser.getUserMail());
 			form.setPassword(registerUser.getUserType().name() + "," + registerUser.getThirdPartyId() + ",USER"); // TODO 仮パスワード長すぎ
+			form.setFacebook(registerUser.getThirdPartyId());
 			accountService.create(form);
 		}
 		// TODO BANされている場合
 
 		// ログイン
-		String account = registerUser.getUserType().name() + "," + registerUser.getThirdPartyId() + ",USER";
-		OpenIDAuthenticationToken token = new OpenIDAuthenticationToken(OpenIDAuthenticationStatus.SUCCESS, account,
-				"", new ArrayList<>());
-		token.setDetails(new WebAuthenticationDetails(request));
-		Authentication authenticatedUser = openIDAuthenticationProvider.authenticate(token);
-		SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+		String pass = registerUser.getUserType().name() + "," + registerUser.getThirdPartyId() + ",USER";
+		UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(
+				registerUser.getThirdPartyId(), pass, AuthorityUtils.createAuthorityList("ROLE_USER"));
+		authReq.setDetails(new WebAuthenticationDetails(request));
+		am = new SampleAuthenticationManager(tAccountRepository);
+		Authentication auth = am.authenticate(authReq);
 
-		//            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		//            request.getSession().setAttribute(ApplicationConstant.USERNAME_KEY, userDetails.getAccount().getUsername());
-		//            request.getSession().setAttribute(ApplicationConstant.USERIMGURL_KEY, userDetails.getAccount().getUserImgUrl());
+		SecurityContextHolder.getContext().setAuthentication(auth);
 		return "redirect:" + appConfig.getUrl();
 	}
 

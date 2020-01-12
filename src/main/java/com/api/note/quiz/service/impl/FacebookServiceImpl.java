@@ -9,6 +9,7 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Parameter;
 import com.restfb.Version;
+import com.restfb.exception.FacebookOAuthException;
 import com.restfb.json.JsonObject;
 import com.restfb.scope.FacebookPermissions;
 import com.restfb.scope.ScopeBuilder;
@@ -46,31 +47,42 @@ public class FacebookServiceImpl implements FacebookService {
 	 */
 	@Override
 	public User getFacebookUser(String code) {
-		// get accessToken
-		FacebookClient client = getFacebookClient(null, facebookSecret);
-		FacebookClient.AccessToken accessToken = client.obtainUserAccessToken(facebookAppId, facebookSecret,
-				redirectUri, code);
+		try {
+			// get accessToken
+			FacebookClient client = getFacebookClient(null, facebookSecret);
+			FacebookClient.AccessToken accessToken = client.obtainUserAccessToken(facebookAppId, facebookSecret,
+					redirectUri, code);
 
-		// get details of current user
-		client = getFacebookClient(accessToken.getAccessToken(), facebookSecret);
-		User user = client.fetchObject("me", User.class, Parameter.with("fields", "id,name,email,picture"));
+			// get details of current user
+			client = getFacebookClient(accessToken.getAccessToken(), facebookSecret);
 
-		// get max picture
-		if (user.getPicture() != null) {
-			JsonObject pictureJson = client.fetchObject("me/picture", JsonObject.class,
-					Parameter.with("width", "132"),
-					Parameter.with("height", "132"),
-					Parameter.with("redirect", false));
-			if (pictureJson != null) {
-				if (pictureJson.get("data") != null) {
-					String url = pictureJson.get("data").asObject().get("url").asString();
-					if (StringUtils.isNotBlank(url)) {
-						user.getPicture().setUrl(url);
+			User user = client.fetchObject("me", User.class);
+
+			// get max picture
+			if (user.getPicture() != null) {
+				JsonObject pictureJson = client.fetchObject("me/picture", JsonObject.class,
+						Parameter.with("width", "132"),
+						Parameter.with("height", "132"),
+						Parameter.with("redirect", false));
+
+				if (pictureJson != null) {
+					if (pictureJson.get("data") != null) {
+						String url = pictureJson.get("data").asObject().get("url").asString();
+						if (StringUtils.isNotBlank(url)) {
+							user.getPicture().setUrl(url);
+						}
 					}
 				}
 			}
+			return user;
+		} catch (FacebookOAuthException e) {
+			// TODO コードが誤っている場合
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
 		}
-		return user;
 	}
 
 	/**
@@ -83,7 +95,8 @@ public class FacebookServiceImpl implements FacebookService {
 	 * @return the client of facebook
 	 */
 	private FacebookClient getFacebookClient(String accessToken, String appSecret) {
-		Version apiVersion = Version.VERSION_3_1;
+		Version apiVersion = Version.VERSION_3_2;
+
 		if (StringUtils.isAnyBlank(accessToken, appSecret)) {
 			return new DefaultFacebookClient(apiVersion);
 		} else {
