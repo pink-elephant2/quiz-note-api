@@ -21,6 +21,8 @@ spring:
       appId: ${QUIZ_NOTE_FACEBOOK_APP_ID:}
       appSecret: ${QUIZ_NOTE_FACEBOOK_APP_SECRET:}
       redirectUri: ${QUIZ_NOTE_FACEBOOK_REDIRECT_URL:}
+logging:
+    config: classpath:config/logbak.xml
 
 quiz:
   url: https://www.quiz-note.com/
