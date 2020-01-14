@@ -7,6 +7,7 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -212,7 +213,7 @@ public class AccountServiceImpl implements AccountService {
 			String cd = RandomStringUtils.randomAlphanumeric(10);
 
 			// S3に保存、URLを設定する
-			String fileName = SessionInfoContextHolder.getSessionInfo().getLoginId() + "/" + cd + ".png"; // TODO ファイル拡張子
+			String fileName = SecurityContextHolder.getContext().getAuthentication().getName() + "/" + cd + ".png"; // TODO ファイル拡張子
 			String filePath = s3Service.upload(DocumentTypeEnum.ACCOUNT, fileName, form.getUpfile());
 
 			// プロフィールを更新する

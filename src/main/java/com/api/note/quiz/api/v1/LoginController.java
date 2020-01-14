@@ -3,6 +3,7 @@ package com.api.note.quiz.api.v1;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.api.note.quiz.aop.SessionInfoContextHolder;
 import com.api.note.quiz.config.AppConfig;
 import com.api.note.quiz.config.AutoAuthenticationManager;
 import com.api.note.quiz.domain.TAccount;
@@ -52,10 +52,13 @@ public class LoginController {
 	@GetMapping("/check")
 	@ResponseBody
 	public String check() {
-		if (!SessionInfoContextHolder.isAuthenticated()) {
+		if (SecurityContextHolder.getContext() == null
+				|| SecurityContextHolder.getContext().getAuthentication() == null
+				|| SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
+			// TODO 401
 			throw new NotFoundException("未ログイン");
 		}
-		return "\"" + SessionInfoContextHolder.getSessionInfo().getLoginId() + "\"";
+		return "\"" + SecurityContextHolder.getContext().getAuthentication().getName() + "\"";
 	}
 
 	/**

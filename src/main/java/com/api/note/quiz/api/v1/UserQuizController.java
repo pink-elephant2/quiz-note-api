@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api.note.quiz.aop.SessionInfoContextHolder;
 import com.api.note.quiz.form.QuizCreateForm;
 import com.api.note.quiz.form.QuizSoundForm;
 import com.api.note.quiz.form.QuizUpdateForm;
@@ -62,7 +62,7 @@ public class UserQuizController {
 	public Page<QuizResource> findList(@SortDefault.SortDefaults({
 			@SortDefault(sort = "quiz_id", direction = Direction.DESC) }) Pageable pageable) {
 		// クイズ一覧を取得する
-		return quizService.findList(SessionInfoContextHolder.getSessionInfo().getLoginId(), pageable);
+		return quizService.findList(SecurityContextHolder.getContext().getAuthentication().getName(), pageable);
 	}
 
 	/**
