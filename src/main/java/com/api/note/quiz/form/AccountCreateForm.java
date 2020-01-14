@@ -16,6 +16,10 @@ public class AccountCreateForm {
 	@Size(max = 30)
 	private String loginId;
 
+	/** アカウント名 */
+	@Size(max = 30)
+	private String name;
+
 	/** メールアドレス */
 	@NotNull
 	@Size(max = 256)
@@ -26,12 +30,17 @@ public class AccountCreateForm {
 	@Size(max = 30)
 	private String password;
 
+	/** 画像パス */
+	@Size(max = 256)
+	private String imgUrl;
+
 	/** Facebookアカウント */
+	@Size(max = 30)
 	private String facebook;
 
 	// TODO パスワードを出力しない
-//	@Override
-//	public String toString() {
-//
-//	}
+	//	@Override
+	//	public String toString() {
+	//
+	//	}
 }

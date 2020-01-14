@@ -18,10 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.api.note.quiz.config.AppConfig;
 import com.api.note.quiz.config.AutoAuthenticationManager;
 import com.api.note.quiz.domain.TAccount;
-import com.api.note.quiz.enums.UserType;
 import com.api.note.quiz.exception.NotFoundException;
 import com.api.note.quiz.form.AccountCreateForm;
-import com.api.note.quiz.form.RegisterUserForm;
 import com.api.note.quiz.service.AccountService;
 import com.api.note.quiz.service.FacebookService;
 import com.restfb.types.User;
@@ -79,44 +77,35 @@ public class LoginController {
 			return "redirect:" + appConfig.getUrl();
 		}
 		// Facebook認証
-		RegisterUserForm registerUser = convertRegisterUserFormByFacebookCode(code);
+		User facebookUser = facebookService.getFacebookUser(code);
 
 		// DBに登録されているユーザーを取得
-		TAccount account = accountService.findByFacebookId(registerUser.getThirdPartyId());
+		TAccount account = accountService.findByFacebookId(facebookUser.getThirdPartyId());
 		// TODO BANされている場合
 		if (account == null) {
 			// ユーザー登録
 			AccountCreateForm form = new AccountCreateForm();
-			form.setLoginId(registerUser.getThirdPartyId()); // TODO ログインID検討
-			form.setMail(registerUser.getUserMail());
-			form.setPassword(registerUser.getUserType().name() + "," + registerUser.getThirdPartyId() + ",USER"); // TODO 仮パスワード長すぎ
-			form.setFacebook(registerUser.getThirdPartyId());
+			form.setLoginId(facebookUser.getThirdPartyId()); // TODO ログインID検討
+			form.setName(facebookUser.getName());
+			form.setMail(facebookUser.getEmail());
+			form.setPassword("FACEBOOK," + facebookUser.getThirdPartyId() + ",USER"); // TODO 仮パスワード長すぎ
+			form.setImgUrl(facebookUser.getPicture() == null ? null : facebookUser.getPicture().getUrl());
+			form.setFacebook(facebookUser.getThirdPartyId());
 			accountService.create(form);
 		}
 		// ログイン
-		autoLogin(request, registerUser, account);
+		autoLogin(request, facebookUser);
 		return "redirect:" + appConfig.getUrl();
-	}
-
-	private RegisterUserForm convertRegisterUserFormByFacebookCode(String code) {
-		User user = facebookService.getFacebookUser(code);
-		RegisterUserForm registerUser = new RegisterUserForm();
-		registerUser.setThirdPartyId(user.getId());
-		registerUser.setUserType(UserType.FACEBOOK);
-		registerUser.setUserMail(user.getEmail());
-		registerUser.setUserName(user.getName());
-		registerUser.setUserImgUrl(user.getPicture() == null ? null : user.getPicture().getUrl());
-		return registerUser;
 	}
 
 	/**
 	 * 独自ログインする
 	 */
-	private void autoLogin(HttpServletRequest request, RegisterUserForm registerUser, TAccount account) {
+	private void autoLogin(HttpServletRequest request, User facebookUser) {
 		// ログイン
-		String pass = account.getLoginId() + "," + account.getFacebook() + ",USER";
+		String pass = "FACEBOOK," + facebookUser.getThirdPartyId() + ",USER";
 		UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(
-				registerUser.getThirdPartyId(), pass, AuthorityUtils.createAuthorityList("ROLE_USER"));
+				facebookUser.getThirdPartyId(), pass, AuthorityUtils.createAuthorityList("ROLE_USER"));
 		authReq.setDetails(new WebAuthenticationDetails(request));
 		Authentication auth = autoAuthenticationManager.authenticate(authReq);
 
