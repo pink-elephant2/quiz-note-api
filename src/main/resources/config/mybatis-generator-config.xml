@@ -47,6 +47,7 @@
         <columnOverride column="reason" javaType="com.api.note.quiz.enums.ReportReasonEnum" />
     </table>
     <table tableName="t_charge_log" modelType="hierarchical"></table>
+    <table tableName="t_contact" modelType="hierarchical"></table>
     <table tableName="t_follow" modelType="hierarchical"></table>
     <table tableName="t_group" modelType="hierarchical"></table>
     <table tableName="t_group_member" modelType="hierarchical"></table>

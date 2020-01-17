@@ -75,6 +75,23 @@ create table t_follow (
   , constraint t_follow_PKC primary key (follow_id)
 ) comment 'フォロー' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- お問合せ
+drop table if exists t_contact cascade;
+
+create table t_contact (
+  contact_id INT(10) not null AUTO_INCREMENT comment 'お問合せID'
+  , read_flag TINYINT(1) default 0 not null comment '既読フラグ'
+  , name VARCHAR(50) not null comment '名前'
+  , mail VARCHAR(256) not null comment 'メールアドレス'
+  , content VARCHAR(1000) not null comment '内容'
+  , deleted VARCHAR(1) default '0' not null comment '削除フラグ'
+  , created_at DATETIME default CURRENT_TIMESTAMP not null comment '作成日時'
+  , created_by VARCHAR(20) default 'SYSTEM' not null comment '作成者'
+  , updated_at DATETIME default CURRENT_TIMESTAMP not null comment '更新日時'
+  , updated_by VARCHAR(20) default 'SYSTEM' not null comment '更新者'
+  , constraint t_contact_PKC primary key (contact_id)
+) comment 'お問合せ' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- グループメンバー
 drop table if exists t_group_member cascade;
 
