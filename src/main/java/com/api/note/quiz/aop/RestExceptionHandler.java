@@ -3,6 +3,7 @@ package com.api.note.quiz.aop;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -21,8 +22,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	 */
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler(NotFoundException.class)
-	public HttpServletResponse handleNotFoundException(NotFoundException ex, HttpServletResponse response) {
-		return response;
+	public ResponseEntity<Object> handleNotFoundException(NotFoundException ex, HttpServletResponse response) {
+		return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.NOT_FOUND);
 	}
 
 }
