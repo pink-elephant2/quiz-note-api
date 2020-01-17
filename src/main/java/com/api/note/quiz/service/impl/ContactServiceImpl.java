@@ -9,6 +9,7 @@ import com.api.note.quiz.domain.TContact;
 import com.api.note.quiz.form.ContactForm;
 import com.api.note.quiz.repository.TContactRepository;
 import com.api.note.quiz.service.ContactService;
+import com.api.note.quiz.service.MailService;
 
 
 /**
@@ -23,6 +24,9 @@ public class ContactServiceImpl implements ContactService {
 
 	@Autowired
 	private Mapper mapper;
+
+	@Autowired
+	private MailService mailService;
 
 	/**
 	 * お問合せ登録する
@@ -40,7 +44,8 @@ public class ContactServiceImpl implements ContactService {
 
 		// TODO 運営にメール送信
 
-		// TODO サンキューメール送信
+		// サンキューメール送信
+		mailService.sendContactComplete(form);
 
 		return true;
 	}

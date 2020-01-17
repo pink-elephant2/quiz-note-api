@@ -10,6 +10,9 @@ import lombok.Data;
 @Data
 public class AppConfig {
 
+	/** アプリ名 */
+	private String appName;
+
 	/** サイトURL */
 	private String url;
 
