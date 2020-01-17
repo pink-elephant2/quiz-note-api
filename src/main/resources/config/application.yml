@@ -48,3 +48,5 @@ quiz:
   s3-region: ap-northeast-1
   s3-bucket: ${QUIZ_NOTE_S3_BUCKET:quiz-note-dev}
   timeout: 21600
+  slack-app-token: ${QUIZ_NOTE_SLACK_APP_TOKEN:}
+  slack-contact-channel: contact

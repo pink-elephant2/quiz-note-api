@@ -10,6 +10,7 @@ import com.api.note.quiz.form.ContactForm;
 import com.api.note.quiz.repository.TContactRepository;
 import com.api.note.quiz.service.ContactService;
 import com.api.note.quiz.service.MailService;
+import com.api.note.quiz.service.SlackService;
 
 
 /**
@@ -28,6 +29,9 @@ public class ContactServiceImpl implements ContactService {
 	@Autowired
 	private MailService mailService;
 
+	@Autowired
+	private SlackService slackService;
+
 	/**
 	 * お問合せ登録する
 	 *
@@ -42,7 +46,8 @@ public class ContactServiceImpl implements ContactService {
 		contact.setReadFlag(false);
 		tContactRepository.create(contact);
 
-		// TODO 運営にメール送信
+		// 運営にSlack送信
+		slackService.sendContactComplete(form);
 
 		// サンキューメール送信
 		mailService.sendContactComplete(form);

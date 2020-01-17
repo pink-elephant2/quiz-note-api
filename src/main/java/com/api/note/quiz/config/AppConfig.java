@@ -37,4 +37,9 @@ public class AppConfig {
 	/** AWSアクセス時のタイムアウト時間(ms) */
 	private Integer timeout;
 
+	/** SlackAPIトークン (お問い合わせBot) */
+	private String slackAppToken;
+
+	/** Slackお問い合わせチャンネル */
+	private String slackContactChannel;
 }
