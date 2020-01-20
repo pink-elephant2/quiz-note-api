@@ -31,6 +31,7 @@ import com.api.note.quiz.repository.TBanReportRepository;
 import com.api.note.quiz.repository.TFollowRepository;
 import com.api.note.quiz.resources.AccountResource;
 import com.api.note.quiz.service.AccountService;
+import com.api.note.quiz.service.MailService;
 import com.api.note.quiz.service.S3Service;
 
 /**
@@ -56,6 +57,9 @@ public class AccountServiceImpl implements AccountService {
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
+	private MailService mailService;
+
+	@Autowired
 	private S3Service s3Service;
 
 	/**
@@ -75,7 +79,12 @@ public class AccountServiceImpl implements AccountService {
 		account.setPasswordChangeDate(new Date());
 
 		// TODO エラーメッセージ
-		return tAccountRepository.create(account);
+		boolean ret = tAccountRepository.create(account);
+		if (ret) {
+			// 登録完了メール送信
+			ret = mailService.sendAccountRegistComplete(form);
+		}
+		return ret;
 	}
 
 	/**
