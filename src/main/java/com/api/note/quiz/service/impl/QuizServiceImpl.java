@@ -47,9 +47,11 @@ import com.api.note.quiz.resources.QuizResource;
 import com.api.note.quiz.service.QuizService;
 import com.api.note.quiz.service.S3Service;
 
+
 /**
  * クイズサービス
  */
+//@Slf4j
 @Service
 @Transactional
 public class QuizServiceImpl implements QuizService {
@@ -169,8 +171,7 @@ public class QuizServiceImpl implements QuizService {
 		TQuiz quiz = mapper.map(form, TQuiz.class);
 		quiz.setQuizCd(cd);
 		quiz.setAccountId(SessionInfoContextHolder.getSessionInfo().getAccountId());
-		Long quizId = tQuizRepository.createReturnId(quiz);
-		quiz.setQuizId(quizId);
+		tQuizRepository.createReturnId(quiz); // quizIdがセットされる
 
 		// TODO コードが重複した場合、ランダム文字列を再生成してリトライする
 
@@ -234,7 +235,7 @@ public class QuizServiceImpl implements QuizService {
 			}
 		} else if (quizTagList.size() > tagList.size()) {
 			// 既存分が多い場合
-			for (int i = quizTagList.size(); i > tagList.size(); i--) {
+			for (int i = quizTagList.size(); i >= tagList.size(); i--) {
 				quizTagList.get(i - 1).setDeleted(CommonConst.DeletedFlag.ON);
 				tagList.add(null);
 			}
