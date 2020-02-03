@@ -23,8 +23,8 @@
 			<ul style="padding: 0">
 				<li th:inline="text">このメールは、[[${app_title}]]事務局より自動的に送信されております。</li>
 				<li>このメールアドレスは送信専用となっており、ご返信いただけません。</li>
-				<li>このメールにお心当たりがない場合や、ご不明な点等ございましたら<a
-					href="https://www.quiz-note.com/contact">お問い合わせフォーム(https://www.quiz-note.com/contact)</a>よりご連絡ください。
+				<li th:inline="text">このメールにお心当たりがない場合や、ご不明な点等ございましたら<a
+					th:href="${app_contact_url}">お問い合わせフォーム([[${app_contact_url}]])</a>よりご連絡ください。
 				</li>
 			</ul>
 			<p>**************************************************</p>

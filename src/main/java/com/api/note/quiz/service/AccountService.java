@@ -1,5 +1,7 @@
 package com.api.note.quiz.service;
 
+import javax.validation.constraints.NotNull;
+
 import com.api.note.quiz.domain.TAccount;
 import com.api.note.quiz.enums.ReportReasonEnum;
 import com.api.note.quiz.form.AccountCreateForm;
@@ -66,5 +68,5 @@ public interface AccountService {
 	/**
 	 * FacebookIDからアカウントを取得する
 	 */
-	public TAccount findByFacebookId(String facebookId);
+	public TAccount findByFacebookId(@NotNull String facebookId);
 }

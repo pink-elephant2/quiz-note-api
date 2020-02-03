@@ -3,8 +3,11 @@ package com.api.note.quiz.service.impl;
 import java.io.IOException;
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -80,7 +83,8 @@ public class AccountServiceImpl implements AccountService {
 
 		// TODO エラーメッセージ
 		boolean ret = tAccountRepository.create(account);
-		if (ret) {
+		if (ret && !StringUtils.isEmpty(form.getMail())) {
+			// ソーシャルからメールが取得できない場合がある
 			// 登録完了メール送信
 			ret = mailService.sendAccountRegistComplete(form);
 		}
@@ -244,7 +248,7 @@ public class AccountServiceImpl implements AccountService {
 	 * FacebookIDからアカウントを取得する
 	 */
 	@Override
-	public TAccount findByFacebookId(String facebookId) {
+	public TAccount findByFacebookId(@NotNull String facebookId) {
 		TAccountExample example = new TAccountExample();
 		example.createCriteria().andFacebookEqualTo(facebookId).andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
 		return tAccountRepository.findOneBy(example);

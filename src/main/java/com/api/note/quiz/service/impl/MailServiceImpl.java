@@ -52,6 +52,7 @@ public class MailServiceImpl implements MailService {
 		// 可変情報
 		Context context = new Context();
 		context.setVariable("app_title", appConfig.getAppName());
+		context.setVariable("app_contact_url", appConfig.getUrl() + "contact");
 		context.setVariable("name", form.getLoginId());
 		context.setVariable("mail", form.getMail());
 		context.setVariable("password", form.getPasswordMasked());
@@ -75,6 +76,7 @@ public class MailServiceImpl implements MailService {
 		// 可変情報
 		Context context = new Context();
 		context.setVariable("app_title", appConfig.getAppName());
+		context.setVariable("app_contact_url", appConfig.getUrl() + "contact");
 		context.setVariable("name", form.getName());
 		context.setVariable("content", form.getContent()); // TODO 改行コードを<br>に変換
 
