@@ -50,3 +50,4 @@ quiz:
   timeout: 21600
   slack-app-token: ${QUIZ_NOTE_SLACK_APP_TOKEN:}
   slack-contact-channel: contact
+  aes-key: ${QUIZ_NOTE_AES_KEY:}

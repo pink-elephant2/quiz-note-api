@@ -3,6 +3,7 @@ package com.api.note.quiz.service.impl;
 import java.nio.charset.StandardCharsets;
 
 import javax.mail.internet.MimeMessage;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,6 +43,9 @@ public class MailServiceImpl implements MailService {
 	/** お問い合わせ完了メールテンプレート */
 	private final String MAIL_TEMPLATE_CONTACT_COMPLETE = "contact_complete";
 
+	/** パスワードリマインダーメールテンプレート */
+	private final String MAIL_TEMPLATE_ACCOUNT_PASSWORD_REMINDER = "account_password_reminder";
+
 	/**
 	 * アカウント登録完了メールを送信する
 	 *
@@ -52,7 +56,7 @@ public class MailServiceImpl implements MailService {
 		// 可変情報
 		Context context = new Context();
 		context.setVariable("app_title", appConfig.getAppName());
-		context.setVariable("app_contact_url", appConfig.getUrl() + "contact");
+		context.setVariable("app_contact_url", getContactUrl());
 		context.setVariable("name", form.getLoginId());
 		context.setVariable("mail", form.getMail());
 		context.setVariable("password", form.getPasswordMasked());
@@ -76,7 +80,7 @@ public class MailServiceImpl implements MailService {
 		// 可変情報
 		Context context = new Context();
 		context.setVariable("app_title", appConfig.getAppName());
-		context.setVariable("app_contact_url", appConfig.getUrl() + "contact");
+		context.setVariable("app_contact_url", getContactUrl());
 		context.setVariable("name", form.getName());
 		context.setVariable("content", form.getContent()); // TODO 改行コードを<br>に変換
 
@@ -86,6 +90,38 @@ public class MailServiceImpl implements MailService {
 		javaMailSender.send(message);
 
 		return true;
+	}
+
+	/**
+	 * パスワードリマインダーメールを送信する
+	 *
+	 * @param mail メールアドレス
+	 * @param token ワンタイムトークン
+	 */
+	@Override
+	public boolean sendPasswordReminder(@NotNull String mail, @NotNull String token) {
+		// 可変情報
+		Context context = new Context();
+		context.setVariable("app_title", appConfig.getAppName());
+		context.setVariable("app_contact_url", getContactUrl());
+		context.setVariable("name", mail);
+		context.setVariable("url", appConfig.getUrl() + "reminder/cbk?token=" + token);
+
+		MimeMessagePreparator message = createMimeMessagePreparator(mail, "パスワードの変更リクエスト受付のお知らせ", context,
+				MAIL_TEMPLATE_ACCOUNT_PASSWORD_REMINDER);
+
+		javaMailSender.send(message);
+
+		return true;
+	}
+
+	/**
+	 * お問い合わせページのURLを返却する
+	 *
+	 * @return https://ドメイン/contact
+	 */
+	private String getContactUrl() {
+		return appConfig.getUrl() + "contact";
 	}
 
 	/**

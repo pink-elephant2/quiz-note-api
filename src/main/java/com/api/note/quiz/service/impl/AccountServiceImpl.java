@@ -253,4 +253,21 @@ public class AccountServiceImpl implements AccountService {
 		example.createCriteria().andFacebookEqualTo(facebookId).andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
 		return tAccountRepository.findOneBy(example);
 	}
+
+	/**
+	 * メールアドレスからアカウントを取得する
+	 *
+	 * @param mail メールアドレス
+	 */
+	@Override
+	public TAccount findByMail(@NotNull String mail) {
+		TAccountExample example = new TAccountExample();
+		example.createCriteria().andMailEqualTo(mail).andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
+		TAccount account = tAccountRepository.findOneBy(example);
+
+		if (account == null) {
+			throw new NotFoundException("アカウントが存在しません");
+		}
+		return account;
+	}
 }

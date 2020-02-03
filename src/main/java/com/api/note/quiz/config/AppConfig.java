@@ -42,4 +42,7 @@ public class AppConfig {
 
 	/** Slackお問い合わせチャンネル */
 	private String slackContactChannel;
+
+	/** AESキー */
+	private String aesKey;
 }

@@ -69,4 +69,11 @@ public interface AccountService {
 	 * FacebookIDからアカウントを取得する
 	 */
 	public TAccount findByFacebookId(@NotNull String facebookId);
+
+	/**
+	 * メールアドレスからアカウントを取得する
+	 *
+	 * @param mail メールアドレス
+	 */
+	public TAccount findByMail(@NotNull String mail);
 }

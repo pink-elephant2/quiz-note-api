@@ -92,5 +92,4 @@ public class LoginController {
 
 		SecurityContextHolder.getContext().setAuthentication(auth);
 	}
-
 }
