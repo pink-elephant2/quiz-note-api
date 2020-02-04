@@ -7,6 +7,7 @@ import com.api.note.quiz.enums.ReportReasonEnum;
 import com.api.note.quiz.form.AccountCreateForm;
 import com.api.note.quiz.form.AccountImageForm;
 import com.api.note.quiz.form.AccountUpdateForm;
+import com.api.note.quiz.form.PasswordResetForm;
 import com.api.note.quiz.resources.AccountResource;
 
 /**
@@ -56,6 +57,11 @@ public interface AccountService {
 	 *            プロフィールフォーム
 	 */
 	public boolean saveProfile(AccountUpdateForm form);
+
+	/**
+	 * パスワードを更新する
+	 */
+	public boolean savePassword(PasswordResetForm form);
 
 	/**
 	 * アカウント画像を更新する

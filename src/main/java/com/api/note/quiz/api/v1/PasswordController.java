@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.note.quiz.config.AppConfig;
 import com.api.note.quiz.domain.TAccount;
+import com.api.note.quiz.exception.NotFoundException;
 import com.api.note.quiz.form.PasswordReminderForm;
 import com.api.note.quiz.form.PasswordResetForm;
 import com.api.note.quiz.service.AccountService;
+import com.api.note.quiz.service.CacheService;
 import com.api.note.quiz.service.MailService;
 import com.api.note.quiz.util.AesUtils;
 
@@ -32,10 +34,16 @@ public class PasswordController {
 	private AccountService accountService;
 
 	@Autowired
+	private CacheService cacheService;
+
+	@Autowired
 	private MailService mailService;
 
 	@Autowired
 	private AppConfig appConfig;
+
+	/** キャッシュキー */
+	private final String CACHE_KEY_PREFIX = "FORGET_ID_KEY:";
 
 	/**
 	 * リマインダーメールを送信する
@@ -48,9 +56,9 @@ public class PasswordController {
 		TAccount account = accountService.findByMail(form.getMail());
 
 		// ワンタイムトークン生成
+		String secretKey = RandomStringUtils.randomAlphanumeric(16);
 		String token;
 		try {
-			String secretKey = RandomStringUtils.randomAlphanumeric(16);
 			String key = account.getLoginId() + "," + secretKey;
 			String signature = AesUtils.encrypt(appConfig.getAesKey(), key);
 			token = URLEncoder.encode(signature, "utf-8");
@@ -58,8 +66,8 @@ public class PasswordController {
 			throw e;
 		}
 
-		// TODO キャッシュ(24時間)
-		//		cacheService.saveString("FORGET_ID_KEY:" + account.getLoginId(), secretKey, 86400);
+		// キャッシュ(24時間)
+		cacheService.saveValue(CACHE_KEY_PREFIX + account.getLoginId(), secretKey, 86400);
 
 		// リマインダーメール送信
 		return mailService.sendPasswordReminder(form.getMail(), token);
@@ -71,9 +79,9 @@ public class PasswordController {
 	 * @param token ワンタイムトークン
 	 */
 	@GetMapping("/reminder/token")
-	public boolean checkToken(String token) {
-		// TODO 実装
-		return true;
+	public boolean check(String token) {
+		// トークンチェック
+		return checkToken(token);
 	}
 
 	/**
@@ -81,8 +89,38 @@ public class PasswordController {
 	 */
 	@PostMapping("/reset")
 	public boolean reset(@RequestBody @Validated PasswordResetForm form) {
-		form.getMail();
-		// TODO 実装
+		// トークンチェック
+		if (!checkToken(form.getToken())) {
+			// 有効期限切れなど
+			throw new NotFoundException("");
+		}
+		// パスワード更新
+		return accountService.savePassword(form);
+	}
+
+	/**
+	 * トークンチェック
+	 */
+	private boolean checkToken(String token) {
+		String key;
+		try {
+			key = AesUtils.decrypt(appConfig.getAesKey(), token);
+		} catch (Exception e) {
+			// 不正なアクセス
+			throw new NotFoundException("");
+		}
+		String[] tempArray = key.split(",");
+		String loginId = tempArray[0];
+		String secretKey = tempArray[1];
+		String secretKeyCache = cacheService.getValue(CACHE_KEY_PREFIX + loginId);
+		if (secretKeyCache == null) {
+			// 有効期限切れ
+			throw new NotFoundException("");
+		}
+		if (!secretKey.equals(secretKeyCache)) {
+			// 不正なアクセス
+			throw new NotFoundException("");
+		}
 		return true;
 	}
 }

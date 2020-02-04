@@ -29,6 +29,7 @@ import com.api.note.quiz.exception.NotFoundException;
 import com.api.note.quiz.form.AccountCreateForm;
 import com.api.note.quiz.form.AccountImageForm;
 import com.api.note.quiz.form.AccountUpdateForm;
+import com.api.note.quiz.form.PasswordResetForm;
 import com.api.note.quiz.repository.TAccountRepository;
 import com.api.note.quiz.repository.TBanReportRepository;
 import com.api.note.quiz.repository.TFollowRepository;
@@ -212,6 +213,19 @@ public class AccountServiceImpl implements AccountService {
 		TAccountExample example = new TAccountExample();
 		example.createCriteria().andAccountIdEqualTo(SessionInfoContextHolder.getSessionInfo().getAccountId());
 		return BooleanUtils.toBoolean(tAccountRepository.updatePartiallyBy(account, example));
+	}
+
+	/**
+	 * パスワードを更新する
+	 */
+	@Override
+	public boolean savePassword(PasswordResetForm form) {
+		// アカウントを取得
+		TAccount account = findByMail(form.getMail());
+
+		account.setPassword(form.getPassword());
+
+		return tAccountRepository.updatePartially(account);
 	}
 
 	/**
