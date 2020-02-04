@@ -277,7 +277,7 @@ public class AccountServiceImpl implements AccountService {
 	public TAccount findByMail(@NotNull String mail) {
 		TAccountExample example = new TAccountExample();
 		example.createCriteria().andMailEqualTo(mail).andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
-		TAccount account = tAccountRepository.findOneBy(example);
+		TAccount account = tAccountRepository.findOneBy(example); // TODO 2件以上HITした場合
 
 		if (account == null) {
 			throw new NotFoundException("アカウントが存在しません");

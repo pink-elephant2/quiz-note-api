@@ -18,7 +18,7 @@
 | ログアウトAPI								| POST		| /api/v1/logout							| ○ |
 | FacebookログインAPI						| GET		| /api/v1/login/facebook					| - |
 | パスワードリマインダーメール送信API		| POST		| /api/v1/password/reminder					| - |
-| パスワードリマインダートークンチェックAPI	| GET		| /api/v1/password/reminder/token			| - |
+| パスワードリマインダートークンチェックAPI	| GET		| /api/v1/password/reminder/token/{token}	| - |
 | パスワード再設定API						| POST		| /api/v1/password/reset					| - |
 | お問合せ登録API							| POST		| /api/v1/contact							| - |
 | フォロー取得API							| GET		| /api/v1/account/{loginId}/follow			| - |

@@ -34,6 +34,11 @@ spring:
             enable: true
   thymeleaf:
     check-template-location: false
+  redis:
+    host: localhost
+    password:
+    port: 6379
+    timeout: 300
 
 logging:
     config: classpath:config/logbak.xml
