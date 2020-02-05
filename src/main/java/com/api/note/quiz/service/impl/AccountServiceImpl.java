@@ -223,7 +223,8 @@ public class AccountServiceImpl implements AccountService {
 		// アカウントを取得
 		TAccount account = findByMail(form.getMail());
 
-		account.setPassword(form.getPassword());
+		account.setPassword(passwordEncoder.encode(form.getPassword()));
+		account.setPasswordChangeDate(new Date());
 
 		return tAccountRepository.updatePartially(account);
 	}

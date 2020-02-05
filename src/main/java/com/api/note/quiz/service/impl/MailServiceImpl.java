@@ -105,7 +105,7 @@ public class MailServiceImpl implements MailService {
 		context.setVariable("app_title", appConfig.getAppName());
 		context.setVariable("app_contact_url", getContactUrl());
 		context.setVariable("name", mail);
-		context.setVariable("url", appConfig.getUrl() + "reminder/cbk?token=" + token);
+		context.setVariable("url", appConfig.getUrl() + "password/reminder/cbk?token=" + token);
 
 		MimeMessagePreparator message = createMimeMessagePreparator(mail, "パスワードの変更リクエスト受付のお知らせ", context,
 				MAIL_TEMPLATE_ACCOUNT_PASSWORD_REMINDER);
