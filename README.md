@@ -33,5 +33,11 @@
 | 通報API									| POST		| /api/v1/quiz/{cd}/report					| - |
 | いいねAPI									| POST		| /api/v1/user/{loginId}/quiz/{cd}/like		| ○ |
 | いいね解除API								| POST		| /api/v1/user/{loginId}/quiz/{cd}/dislike	| ○ |
+| グループ取得API							| GET		| /api/v1/user/{loginId}/group/{cd}			| ○ |
+| グループ一覧取得API						| GET		| /api/v1/user/{loginId}/group				| ○ |
+| グループ登録API							| POST		| /api/v1/user/{loginId}/group				| ○ |
+| グループ更新API							| PUT		| /api/v1/user/{loginId}/group				| ○ |
+| グループ削除API							| DELETE	| /api/v1/user/{loginId}/group				| ○ |
+| グループ画像登録API						| POST		| /api/v1/user/{loginId}/group/{cd}/image	| ○ |
 
 ※1 認証不要に変更する可能性あり

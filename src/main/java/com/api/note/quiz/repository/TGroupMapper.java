@@ -6,4 +6,9 @@ import com.api.note.quiz.domain.TGroupExample;
 import com.api.note.quiz.domain.TGroupKey;
 
 public interface TGroupMapper extends BaseMapper<TGroupKey, TGroup, TGroupExample> {
+
+	/**
+	 * レコードを登録してIDを返却する
+	 */
+	public Integer insertReturnId(TGroup tGroup);
 }

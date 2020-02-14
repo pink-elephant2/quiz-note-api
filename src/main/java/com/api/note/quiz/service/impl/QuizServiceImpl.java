@@ -261,6 +261,7 @@ public class QuizServiceImpl implements QuizService {
 	 *            クイズフォーム
 	 * @return クイズ情報
 	 */
+	@Override
 	public QuizResource updateSound(QuizSoundForm form) {
 		// クイズを取得
 		TQuiz quiz = tQuizRepository.findOneByCd(form.getCd());
