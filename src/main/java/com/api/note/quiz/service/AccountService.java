@@ -61,7 +61,7 @@ public interface AccountService {
 	/**
 	 * パスワードを更新する
 	 */
-	public boolean savePassword(PasswordResetForm form);
+	public boolean savePassword(@NotNull String loginId, PasswordResetForm form);
 
 	/**
 	 * アカウント画像を更新する

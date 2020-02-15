@@ -3,6 +3,7 @@ package com.api.note.quiz.api.v1;
 import java.net.URLEncoder;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -82,7 +83,7 @@ public class PasswordController {
 	@GetMapping("/reminder/token/{token}")
 	public boolean check(@PathVariable("token") String token) {
 		// トークンチェック
-		return checkToken(token);
+		return StringUtils.isNotEmpty(checkToken(token));
 	}
 
 	/**
@@ -91,18 +92,27 @@ public class PasswordController {
 	@PostMapping("/reset")
 	public boolean reset(@RequestBody @Validated PasswordResetForm form) {
 		// トークンチェック
-		if (!checkToken(form.getToken())) {
+		String loginId = checkToken(form.getToken());
+		if (StringUtils.isEmpty(loginId)) {
 			// 有効期限切れなど
 			throw new NotFoundException("");
 		}
 		// パスワード更新
-		return accountService.savePassword(form);
+		boolean ret = accountService.savePassword(loginId, form);
+		if (ret) {
+			// キャッシュクリア
+			cacheService.delete(CACHE_KEY_PREFIX + loginId);
+		}
+		return ret;
 	}
 
 	/**
 	 * トークンチェック
+	 *
+	 * @param token トークン
+	 * @return トークンから取得したログインID
 	 */
-	private boolean checkToken(String token) {
+	private String checkToken(String token) {
 		String key;
 		try {
 			key = AesUtils.decrypt(appConfig.getAesKey(), token);
@@ -122,6 +132,6 @@ public class PasswordController {
 			// 不正なアクセス
 			throw new NotFoundException("");
 		}
-		return true;
+		return loginId;
 	}
 }

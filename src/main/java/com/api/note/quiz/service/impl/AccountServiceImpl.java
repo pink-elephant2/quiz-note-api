@@ -219,9 +219,14 @@ public class AccountServiceImpl implements AccountService {
 	 * パスワードを更新する
 	 */
 	@Override
-	public boolean savePassword(PasswordResetForm form) {
+	public boolean savePassword(@NotNull String loginId, PasswordResetForm form) {
 		// アカウントを取得
-		TAccount account = findByMail(form.getMail());
+		TAccount account = tAccountRepository.findOneByLoginId(loginId);
+
+		if (!form.getMail().equals(account.getMail())) {
+			// フォームのメールとDBのメールが異なる場合エラー
+			throw new NotFoundException("アカウントが存在しません");
+		}
 
 		account.setPassword(passwordEncoder.encode(form.getPassword()));
 		account.setPasswordChangeDate(new Date());
