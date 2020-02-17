@@ -46,10 +46,7 @@ public class TGroupRepositoryImpl implements TGroupRepository {
 	@Override
 	public TGroup findOneByCd(String groupCd) {
 		TGroupExample groupExample = new TGroupExample();
-		// TODO グループコードカラム追加
-		groupExample.createCriteria().andGroupIdEqualTo(Integer.parseInt(groupCd))
-				.andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
-		//		groupExample.createCriteria().andGroupCdEqualTo(groupCd).andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
+		groupExample.createCriteria().andGroupCdEqualTo(groupCd).andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
 		TGroup group = findOneBy(groupExample);
 		if (group == null) {
 			throw new NotFoundException("グループが存在しません");

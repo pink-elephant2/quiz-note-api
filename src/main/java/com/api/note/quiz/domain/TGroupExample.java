@@ -312,6 +312,76 @@ public class TGroupExample implements BaseExample {
             return (Criteria) this;
         }
 
+        public Criteria andGroupCdIsNull() {
+            addCriterion("group_cd is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupCdIsNotNull() {
+            addCriterion("group_cd is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupCdEqualTo(String value) {
+            addCriterion("group_cd =", value, "groupCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupCdNotEqualTo(String value) {
+            addCriterion("group_cd <>", value, "groupCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupCdGreaterThan(String value) {
+            addCriterion("group_cd >", value, "groupCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupCdGreaterThanOrEqualTo(String value) {
+            addCriterion("group_cd >=", value, "groupCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupCdLessThan(String value) {
+            addCriterion("group_cd <", value, "groupCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupCdLessThanOrEqualTo(String value) {
+            addCriterion("group_cd <=", value, "groupCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupCdLike(String value) {
+            addCriterion("group_cd like", value, "groupCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupCdNotLike(String value) {
+            addCriterion("group_cd not like", value, "groupCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupCdIn(List<String> values) {
+            addCriterion("group_cd in", values, "groupCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupCdNotIn(List<String> values) {
+            addCriterion("group_cd not in", values, "groupCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupCdBetween(String value1, String value2) {
+            addCriterion("group_cd between", value1, value2, "groupCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupCdNotBetween(String value1, String value2) {
+            addCriterion("group_cd not between", value1, value2, "groupCd");
+            return (Criteria) this;
+        }
+
         public Criteria andNameIsNull() {
             addCriterion("`name` is null");
             return (Criteria) this;
@@ -969,6 +1039,11 @@ public class TGroupExample implements BaseExample {
 
         public Criteria andUpdatedByNotBetween(String value1, String value2) {
             addCriterion("updated_by not between", value1, value2, "updatedBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupCdLikeInsensitive(String value) {
+            addCriterion("upper(group_cd) like", value.toUpperCase(), "groupCd");
             return (Criteria) this;
         }
 

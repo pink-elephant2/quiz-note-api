@@ -1,6 +1,7 @@
 package com.api.note.quiz.resources;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,19 +16,27 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class GroupResource {
 
-    /** グループ名 */
-    private String name;
+	/** グループID */
+	@JsonProperty("id")
+	private Integer groupId;
 
-    /** 管理者アカウント */
-    private AccountResource account;
+	/** グループCD */
+	@JsonProperty("cd")
+	private String groupCd;
 
-    /** 公式フラグ */
-    private Boolean official;
+	/** グループ名 */
+	private String name;
 
-    /** 自己紹介 */
-    private String description;
+	/** 管理者アカウント */
+	private AccountResource account;
 
-    /** 画像URL */
-    private String imgUrl;
+	/** 公式フラグ */
+	private Boolean official;
+
+	/** 自己紹介 */
+	private String description;
+
+	/** 画像URL */
+	private String imgUrl;
 
 }

@@ -123,7 +123,7 @@ public class GroupServiceImpl implements GroupService {
 
 		// レコード追加
 		TGroup group = mapper.map(form, TGroup.class);
-		//		group.setGroupCd(cd); TODO グループコードカラム追加
+		group.setGroupCd(cd);
 		group.setAccountId(SessionInfoContextHolder.getSessionInfo().getAccountId());
 		tGroupRepository.createReturnId(group); // groupIdがセットされる
 
