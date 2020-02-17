@@ -1,5 +1,5 @@
 -- Project Name : みんなのクイズ手帳
--- Date/Time    : 2019/12/22 17:16:19
+-- Date/Time    : 2020/02/16 17:08:06
 -- Author       : c5apple
 -- RDBMS Type   : MySQL
 -- Application  : A5:SQL Mk-2
@@ -59,6 +59,23 @@ create table t_charge_log (
   , constraint t_charge_log_PKC primary key (charge_log_id)
 ) comment '課金ログ' ;
 
+-- お問合せ
+drop table if exists t_contact cascade;
+
+create table t_contact (
+  contact_id INT(10) not null AUTO_INCREMENT comment 'お問合せID'
+  , read_flag TINYINT(1) default 0 not null comment '既読フラグ'
+  , name VARCHAR(50) not null comment '名前'
+  , mail VARCHAR(256) not null comment 'メールアドレス'
+  , content VARCHAR(1000) not null comment '内容'
+  , deleted VARCHAR(1) default '0' not null comment '削除フラグ'
+  , created_at DATETIME default CURRENT_TIMESTAMP not null comment '作成日時'
+  , created_by VARCHAR(30) not null comment '作成者'
+  , updated_at DATETIME default CURRENT_TIMESTAMP not null comment '更新日時'
+  , updated_by VARCHAR(30) not null comment '更新者'
+  , constraint t_contact_PKC primary key (contact_id)
+) comment 'お問合せ' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- フォロー
 drop table if exists t_follow cascade;
 
@@ -74,23 +91,6 @@ create table t_follow (
   , updated_by VARCHAR(30) not null comment '更新者'
   , constraint t_follow_PKC primary key (follow_id)
 ) comment 'フォロー' ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- お問合せ
-drop table if exists t_contact cascade;
-
-create table t_contact (
-  contact_id INT(10) not null AUTO_INCREMENT comment 'お問合せID'
-  , read_flag TINYINT(1) default 0 not null comment '既読フラグ'
-  , name VARCHAR(50) not null comment '名前'
-  , mail VARCHAR(256) not null comment 'メールアドレス'
-  , content VARCHAR(1000) not null comment '内容'
-  , deleted VARCHAR(1) default '0' not null comment '削除フラグ'
-  , created_at DATETIME default CURRENT_TIMESTAMP not null comment '作成日時'
-  , created_by VARCHAR(20) default 'SYSTEM' not null comment '作成者'
-  , updated_at DATETIME default CURRENT_TIMESTAMP not null comment '更新日時'
-  , updated_by VARCHAR(20) default 'SYSTEM' not null comment '更新者'
-  , constraint t_contact_PKC primary key (contact_id)
-) comment 'お問合せ' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- グループメンバー
 drop table if exists t_group_member cascade;
@@ -172,6 +172,7 @@ drop table if exists t_group cascade;
 
 create table t_group (
   group_id INT(10) not null AUTO_INCREMENT comment 'グループID'
+  , group_cd VARCHAR(50) not null comment 'グループCD'
   , name VARCHAR(30) not null comment 'グループ名'
   , account_id INT(10) not null comment '管理者アカウントID'
   , official TINYINT(1) comment '公式フラグ'
@@ -185,7 +186,7 @@ create table t_group (
   , constraint t_group_PKC primary key (group_id)
 ) comment 'グループ' ;
 
-alter table t_group add unique name (name) ;
+alter table t_group add unique group_cd (group_cd) ;
 
 -- クイズ
 drop table if exists t_quiz cascade;

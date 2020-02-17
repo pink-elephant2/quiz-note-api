@@ -16,6 +16,7 @@ import com.api.note.quiz.aop.SessionInfoContextHolder;
 import com.api.note.quiz.consts.CommonConst;
 import com.api.note.quiz.domain.TGroup;
 import com.api.note.quiz.domain.TGroupExample;
+import com.api.note.quiz.domain.TGroupMember;
 import com.api.note.quiz.domain.TGroupMemberExample;
 import com.api.note.quiz.enums.DocumentTypeEnum;
 import com.api.note.quiz.exception.NotFoundException;
@@ -120,7 +121,6 @@ public class GroupServiceImpl implements GroupService {
 		// 新規グループ
 		String cd = RandomStringUtils.randomAlphanumeric(10);
 
-
 		// レコード追加
 		TGroup group = mapper.map(form, TGroup.class);
 		//		group.setGroupCd(cd); TODO グループコードカラム追加
@@ -128,6 +128,11 @@ public class GroupServiceImpl implements GroupService {
 		tGroupRepository.createReturnId(group); // groupIdがセットされる
 
 		// TODO コードが重複した場合、ランダム文字列を再生成してリトライする
+
+		// メンバーレコード追加
+		TGroupMember groupMember = mapper.map(group, TGroupMember.class);
+		groupMember.setBlocked(false);
+		tGroupMemberRepository.create(groupMember);
 
 		// 戻り値
 		GroupResource resource = mapper.map(group, GroupResource.class);

@@ -132,16 +132,17 @@ Page=TABLE
 Left=100
 Top=800
 Field="グループID","group_id","INT(10)","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
+Field="グループCD","group_cd","VARCHAR(50)","NOT NULL",,"","",$FFFFFFFF,""
 Field="グループ名","name","VARCHAR(30)","NOT NULL",,"","",$FFFFFFFF,""
 Field="管理者アカウントID","account_id","INT(10)","NOT NULL",,"","",$FFFFFFFF,""
 Field="公式フラグ","official","TINYINT(1)",,,"","",$FFFFFFFF,""
 Field="自己紹介","description","VARCHAR(120)",,,"","",$FFFFFFFF,""
 Field="画像URL","img_url","VARCHAR(256)",,,"","",$FFFFFFFF,""
-Index=name=2,name 
+Index=group_cd=2,group_cd 
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-ModifiedDateTime=20191123215418
+ModifiedDateTime=20200216170334
 Position="TABLE",100,800
 ZOrder=3
 
@@ -495,3 +496,23 @@ ZOrder=20
 Page=VIEW
 Left=1000
 Top=200
+
+[Entity]
+PName=t_contact
+LName=お問合せ
+Comment=
+TableOption=ENGINE=InnoDB DEFAULT CHARSET=utf8
+Page=TABLE
+Left=100
+Top=1150
+Field="お問合せID","contact_id","INT(10)","NOT NULL",0,"","",$FFFFFFFF,"AUTO_INCREMENT"
+Field="既読フラグ","read_flag","TINYINT(1)","NOT NULL",,"0","",$FFFFFFFF,""
+Field="名前","name","VARCHAR(50)","NOT NULL",,"","",$FFFFFFFF,""
+Field="メールアドレス","mail","VARCHAR(256)","NOT NULL",,"","",$FFFFFFFF,""
+Field="内容","content","VARCHAR(1000)","NOT NULL",,"","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20190415220650
+Position="TABLE",100,1150
+ZOrder=21
