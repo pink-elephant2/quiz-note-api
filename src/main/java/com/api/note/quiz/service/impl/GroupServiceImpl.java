@@ -165,6 +165,7 @@ public class GroupServiceImpl implements GroupService {
 
 		// 戻り値
 		GroupResource resource = mapper.map(form, GroupResource.class);
+		resource.setGroupCd(form.getCd());
 		// TODO 投稿ユーザー View または キャッシュ
 		resource.setAccount(mapper.map(tAccountRepository.findOneById(group.getAccountId()), AccountResource.class));
 		return resource;
