@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api.note.quiz.form.GroupCreateForm;
 import com.api.note.quiz.form.GroupImageForm;
 import com.api.note.quiz.form.GroupUpdateForm;
+import com.api.note.quiz.resources.GroupMemberResource;
 import com.api.note.quiz.resources.GroupResource;
 import com.api.note.quiz.service.GroupService;
 
@@ -119,4 +120,22 @@ public class UserGroupController {
 		// グループを削除する
 		return groupService.remove(cd);
 	}
+
+	/**
+	 * グループメンバー一覧取得
+	 *
+	 * @param cd
+	 *            コード
+	 * @param pageable
+	 *            ページ情報
+	 */
+	@GetMapping("/{cd}/member")
+	@ResponseStatus(HttpStatus.OK)
+	public Page<GroupMemberResource> findMemberList(@PathVariable("cd") String cd, @SortDefault.SortDefaults({
+			@SortDefault(sort = "updated_at", direction = Direction.DESC) }) Pageable pageable) {
+		// 自分が所属するグループのメンバー一覧を取得する
+		return groupService.findMemberList(SecurityContextHolder.getContext().getAuthentication().getName(), cd,
+				pageable);
+	}
+
 }

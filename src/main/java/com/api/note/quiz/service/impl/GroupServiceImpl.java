@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.api.note.quiz.aop.SessionInfoContextHolder;
 import com.api.note.quiz.consts.CommonConst;
+import com.api.note.quiz.domain.TAccount;
 import com.api.note.quiz.domain.TGroup;
 import com.api.note.quiz.domain.TGroupExample;
 import com.api.note.quiz.domain.TGroupMember;
@@ -27,6 +28,7 @@ import com.api.note.quiz.repository.TAccountRepository;
 import com.api.note.quiz.repository.TGroupMemberRepository;
 import com.api.note.quiz.repository.TGroupRepository;
 import com.api.note.quiz.resources.AccountResource;
+import com.api.note.quiz.resources.GroupMemberResource;
 import com.api.note.quiz.resources.GroupResource;
 import com.api.note.quiz.service.GroupService;
 import com.api.note.quiz.service.S3Service;
@@ -224,5 +226,39 @@ public class GroupServiceImpl implements GroupService {
 				.andAccountIdEqualTo(SessionInfoContextHolder.getSessionInfo().getAccountId())
 				.andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
 		return BooleanUtils.toBoolean(tGroupRepository.updatePartiallyBy(entity, example));
+	}
+
+	/**
+	 * メンバー一覧を取得する
+	 *
+	 * @param loginId
+	 *            ログインID TODO 自分が所属するグループに絞るか仕様検討
+	 * @param cd
+	 *            コード
+	 * @param pageable
+	 *            ページ情報
+	 * @param メンバー一覧
+	 */
+	@Override
+	public Page<GroupMemberResource> findMemberList(String loginId, String cd, Pageable pageable) {
+		// グループを取得
+		TGroup group = tGroupRepository.findOneByCd(cd);
+
+		// グループメンバーを取得
+		TGroupMemberExample example = new TGroupMemberExample();
+		example.createCriteria().andGroupIdEqualTo(group.getGroupId())
+				.andBlockedEqualTo(false) // ブロックされていない
+				.andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
+
+		return tGroupMemberRepository.findPageBy(example, pageable).map(tGroupMember -> {
+			GroupMemberResource resource = mapper.map(tGroupMember, GroupMemberResource.class);
+
+			// アカウントを取得 TODO 性能改善
+			TAccount tAccount = tAccountRepository.findOneById(tGroupMember.getAccountId());
+
+			resource.setAccount(mapper.map(tAccount, AccountResource.class));
+			resource.setManager(group.getAccountId().equals(tAccount.getAccountId()));
+			return resource;
+		});
 	}
 }

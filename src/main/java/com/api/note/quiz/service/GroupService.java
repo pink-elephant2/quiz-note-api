@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import com.api.note.quiz.form.GroupCreateForm;
 import com.api.note.quiz.form.GroupImageForm;
 import com.api.note.quiz.form.GroupUpdateForm;
+import com.api.note.quiz.resources.GroupMemberResource;
 import com.api.note.quiz.resources.GroupResource;
 
 /**
@@ -68,4 +69,18 @@ public interface GroupService {
 	 *            コード
 	 */
 	public boolean remove(String cd);
+
+	/**
+	 * メンバー一覧を取得する
+	 *
+	 * @param loginId
+	 *            ログインID
+	 * @param cd
+	 *            コード
+	 * @param pageable
+	 *            ページ情報
+	 * @param メンバー一覧
+	 */
+	public Page<GroupMemberResource> findMemberList(String loginId, String cd, Pageable pageable);
+
 }

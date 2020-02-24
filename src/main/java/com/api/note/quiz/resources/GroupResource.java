@@ -39,4 +39,7 @@ public class GroupResource {
 	/** 画像URL */
 	private String imgUrl;
 
+	/** ログイン状態の場合、ブロックされているかどうか */
+	@JsonProperty("isBlocked")
+	private boolean isBlocked;
 }

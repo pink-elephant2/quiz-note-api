@@ -39,5 +39,10 @@
 | グループ更新API							| PUT		| /api/v1/user/{loginId}/group				| ○ |
 | グループ削除API							| DELETE	| /api/v1/user/{loginId}/group				| ○ |
 | グループ画像登録API						| POST		| /api/v1/user/{loginId}/group/{cd}/image	| ○ |
+| グループメンバー一覧取得API				| GET		| /api/v1/user/{loginId}/group/{cd}/member	| ○ |
+| グループメンバー登録API					| POST		| /api/v1/user/{loginId}/group/{cd}/member	| ○ |
+| グループメンバー更新API					| PUT		| /api/v1/user/{loginId}/group/{cd}/member	| ○ |
+| グループメンバー削除API					| DELETE	| /api/v1/user/{loginId}/group/{cd}/member	| ○ |
+| グループクイズ一覧取得API					| GET		| /api/v1/user/{loginId}/group/{cd}/quiz	| ○ |
 
 ※1 認証不要に変更する可能性あり
