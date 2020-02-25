@@ -138,4 +138,27 @@ public class UserGroupController {
 				pageable);
 	}
 
+	/**
+	 * グループメンバー登録
+	 */
+	// TODO 実装
+
+	/**
+	 * グループメンバー更新
+	 */
+	// TODO 実装
+
+	/**
+	 * グループメンバー削除
+	 *
+	 * @param cd コード
+	 * @param memberLoginId 削除対象のログインID
+	 */
+	@DeleteMapping("/{cd}/member")
+	@ResponseStatus(HttpStatus.CREATED)
+	public boolean removeMember(@PathVariable("cd") String cd, String memberLoginId) {
+		// グループメンバーを削除する
+		return groupService.removeMember(cd, SecurityContextHolder.getContext().getAuthentication().getName(),
+				memberLoginId);
+	}
 }

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -261,5 +262,59 @@ public class GroupServiceImpl implements GroupService {
 			resource.setManager(group.getAccountId().equals(tAccount.getAccountId()));
 			return resource;
 		});
+	}
+
+	/**
+	 * メンバーを登録する
+	 */
+	// TODO 実装
+
+	/**
+	 * メンバーを更新する
+	 */
+	// TODO 実装
+
+	/**
+	 * メンバーを削除する
+	 *
+	 * @param cd コード
+	 * @param loginId ログインID
+	 * @param memberLoginId 削除対象のログインID
+	 */
+	@Override
+	public boolean removeMember(String cd, String loginId, String memberLoginId) {
+		// グループを取得
+		GroupResource group = find(loginId, cd);
+
+		// 管理者ではない場合は削除できない
+		if (!SessionInfoContextHolder.getSessionInfo().getAccountId().equals(group.getAccount().getAccountId())) {
+			// TODO 403エラー
+			return false;
+		}
+
+		// アカウントを取得
+		TAccount account = tAccountRepository.findOneByLoginId(memberLoginId);
+
+		// グループメンバーを取得
+		TGroupMemberExample example = new TGroupMemberExample();
+		example.createCriteria().andGroupIdEqualTo(group.getGroupId())
+				.andAccountIdEqualTo(account.getAccountId())
+				.andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
+		TGroupMember groupMember = tGroupMemberRepository.findOneBy(example);
+
+		if (groupMember == null) {
+			throw new NotFoundException("メンバーが存在しません");
+		}
+
+		// グループメンバー削除
+		groupMember.setDeleted(CommonConst.DeletedFlag.ON);
+		boolean ret = tGroupMemberRepository.updatePartially(groupMember);
+
+		// メンバーがいなくなった場合、グループも削除する
+		if (0 == findMemberList(loginId, cd, PageRequest.of(0, 1)).getTotalElements()) {
+			ret = remove(cd);
+		}
+
+		return ret;
 	}
 }

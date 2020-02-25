@@ -83,4 +83,23 @@ public interface GroupService {
 	 */
 	public Page<GroupMemberResource> findMemberList(String loginId, String cd, Pageable pageable);
 
+	/**
+	 * メンバーを登録する
+	 */
+	// TODO 実装
+
+	/**
+	 * メンバーを更新する
+	 */
+	// TODO 実装
+
+	/**
+	 * メンバーを削除する
+	 *
+	 * @param cd コード
+	 * @param loginId ログインID
+	 * @param memberLoginId 削除対象のログインID
+	 */
+	public boolean removeMember(String cd, String loginId, String memberLoginId);
+
 }
