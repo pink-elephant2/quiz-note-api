@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.api.note.quiz.form.GroupCreateForm;
 import com.api.note.quiz.form.GroupImageForm;
+import com.api.note.quiz.form.GroupMemberCreateForm;
 import com.api.note.quiz.form.GroupUpdateForm;
 import com.api.note.quiz.resources.GroupMemberResource;
 import com.api.note.quiz.resources.GroupResource;
@@ -85,8 +86,11 @@ public interface GroupService {
 
 	/**
 	 * メンバーを登録する
+	 *
+	 * @param loginId ログインID
+	 * @param form グループメンバーフォーム
 	 */
-	// TODO 実装
+	public boolean createMember(String loginId, GroupMemberCreateForm form);
 
 	/**
 	 * メンバーを更新する

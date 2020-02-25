@@ -24,6 +24,7 @@ import com.api.note.quiz.enums.DocumentTypeEnum;
 import com.api.note.quiz.exception.NotFoundException;
 import com.api.note.quiz.form.GroupCreateForm;
 import com.api.note.quiz.form.GroupImageForm;
+import com.api.note.quiz.form.GroupMemberCreateForm;
 import com.api.note.quiz.form.GroupUpdateForm;
 import com.api.note.quiz.repository.TAccountRepository;
 import com.api.note.quiz.repository.TGroupMemberRepository;
@@ -266,8 +267,41 @@ public class GroupServiceImpl implements GroupService {
 
 	/**
 	 * メンバーを登録する
+	 *
+	 * @param cd コード
+	 * @param loginId ログインID
+	 * @param form グループメンバーフォーム
 	 */
-	// TODO 実装
+	@Override
+	public boolean createMember(String loginId, GroupMemberCreateForm form) {
+		// グループを取得
+		GroupResource group = find(loginId, form.getCd());
+
+		// アカウントを取得
+		TAccount account = tAccountRepository.findOneByLoginId(form.getMemberLoginId());
+		if (account == null) {
+			throw new NotFoundException("アカウントが存在しません");
+		}
+
+		// グループメンバーを取得
+		TGroupMemberExample example = new TGroupMemberExample();
+		example.createCriteria().andGroupIdEqualTo(group.getGroupId())
+				.andAccountIdEqualTo(account.getAccountId())
+				.andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
+		TGroupMember groupMember = tGroupMemberRepository.findOneBy(example);
+
+		if (groupMember != null) {
+			// TODO 403エラー 既に登録済み
+			return false;
+		}
+
+		// メンバーレコード追加
+		groupMember = mapper.map(group, TGroupMember.class);
+		groupMember.setAccountId(account.getAccountId());
+		groupMember.setBlocked(false);
+		// TODO 招待中フラグ追加
+		return tGroupMemberRepository.create(groupMember);
+	}
 
 	/**
 	 * メンバーを更新する

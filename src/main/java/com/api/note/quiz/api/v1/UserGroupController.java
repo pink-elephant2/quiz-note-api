@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.note.quiz.form.GroupCreateForm;
 import com.api.note.quiz.form.GroupImageForm;
+import com.api.note.quiz.form.GroupMemberCreateForm;
 import com.api.note.quiz.form.GroupUpdateForm;
 import com.api.note.quiz.resources.GroupMemberResource;
 import com.api.note.quiz.resources.GroupResource;
@@ -140,8 +141,15 @@ public class UserGroupController {
 
 	/**
 	 * グループメンバー登録
+	 *
+	 * @param form グループメンバーフォーム
 	 */
-	// TODO 実装
+	@PostMapping("/{cd}/member")
+	@ResponseStatus(HttpStatus.CREATED)
+	public boolean createMember(@PathVariable("cd") String cd, @RequestBody @Validated GroupMemberCreateForm form) {
+		// グループメンバーを登録する
+		return groupService.createMember(SecurityContextHolder.getContext().getAuthentication().getName(), form);
+	}
 
 	/**
 	 * グループメンバー更新
