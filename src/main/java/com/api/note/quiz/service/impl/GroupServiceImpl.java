@@ -320,8 +320,9 @@ public class GroupServiceImpl implements GroupService {
 		// グループを取得
 		GroupResource group = find(loginId, cd);
 
-		// 管理者ではない場合は削除できない
-		if (!SessionInfoContextHolder.getSessionInfo().getAccountId().equals(group.getAccount().getAccountId())) {
+		// 管理者ではない場合、自分以外は削除できない
+		if (!(SessionInfoContextHolder.getSessionInfo().getAccountId().equals(group.getAccount().getAccountId())
+				|| loginId.equals(memberLoginId))) {
 			// TODO 403エラー
 			return false;
 		}
