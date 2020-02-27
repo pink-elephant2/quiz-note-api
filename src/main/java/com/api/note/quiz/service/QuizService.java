@@ -1,7 +1,5 @@
 package com.api.note.quiz.service;
 
-import javax.validation.constraints.NotNull;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -34,7 +32,7 @@ public interface QuizService {
 	 *            ページ情報
 	 * @param クイズ一覧
 	 */
-	public Page<QuizResource> findList(@NotNull String loginId, Pageable pageable);
+	public Page<QuizResource> findList(String loginId, Pageable pageable);
 
 	/**
 	 * クイズを登録する
