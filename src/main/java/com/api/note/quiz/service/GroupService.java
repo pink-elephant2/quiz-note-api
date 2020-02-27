@@ -93,11 +93,6 @@ public interface GroupService {
 	public boolean createMember(String loginId, GroupMemberCreateForm form);
 
 	/**
-	 * メンバーを更新する
-	 */
-	// TODO 実装
-
-	/**
 	 * メンバーを削除する
 	 *
 	 * @param cd コード
@@ -105,5 +100,14 @@ public interface GroupService {
 	 * @param memberLoginId 削除対象のログインID
 	 */
 	public boolean removeMember(String cd, String loginId, String memberLoginId);
+
+	/**
+	 * グループの管理者を更新する
+	 *
+	 * @param cd コード
+	 * @param loginId ログインID
+	 * @param managerLoginId 管理者にするログインID
+	 */
+	public boolean updateManager(String cd, String loginId, String managerLoginId);
 
 }

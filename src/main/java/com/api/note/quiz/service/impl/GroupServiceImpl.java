@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -345,11 +347,57 @@ public class GroupServiceImpl implements GroupService {
 		groupMember.setDeleted(CommonConst.DeletedFlag.ON);
 		boolean ret = tGroupMemberRepository.updatePartially(groupMember);
 
-		// メンバーがいなくなった場合、グループも削除する
-		if (0 == findMemberList(loginId, cd, PageRequest.of(0, 1)).getTotalElements()) {
+		// 残りのメンバーを取得
+		Page<GroupMemberResource> groupMemberList = findMemberList(loginId, cd,
+				PageRequest.of(0, 1, Sort.by(Order.asc("created_at"))));
+		if (0 == groupMemberList.getTotalElements()) {
+			// メンバーがいなくなった場合、グループも削除する
 			ret = remove(cd);
+		} else if (1 == groupMemberList.getTotalElements() && !groupMemberList.getContent().get(0).isManager()) {
+			// 最後の1名になった場合、その人を管理者にする
+			TGroup tGroup = mapper.map(group, TGroup.class);
+			tGroup.setAccountId(groupMemberList.getContent().get(0).getAccount().getAccountId()); // 管理者アカウントID
+			ret = tGroupRepository.updatePartially(tGroup);
 		}
 
 		return ret;
+	}
+
+	/**
+	 * グループの管理者を更新する
+	 *
+	 * @param cd コード
+	 * @param loginId ログインID
+	 * @param managerLoginId 管理者にするログインID
+	 */
+	public boolean updateManager(String cd, String loginId, String managerLoginId) {
+		// グループを取得
+		GroupResource group = find(loginId, cd);
+
+		// 管理者ではない場合、更新できない
+		if (!SessionInfoContextHolder.getSessionInfo().getAccountId().equals(group.getAccount().getAccountId())
+				|| loginId.equals(managerLoginId)) {
+			// TODO 403エラー
+			return false;
+		}
+
+		// アカウントを取得
+		TAccount account = tAccountRepository.findOneByLoginId(managerLoginId);
+
+		// グループメンバーを取得
+		TGroupMemberExample example = new TGroupMemberExample();
+		example.createCriteria().andGroupIdEqualTo(group.getGroupId())
+				.andAccountIdEqualTo(account.getAccountId())
+				.andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
+		TGroupMember groupMember = tGroupMemberRepository.findOneBy(example);
+
+		if (groupMember == null) {
+			throw new NotFoundException("メンバーが存在しません");
+		}
+
+		// グループ更新
+		TGroup tGroup = mapper.map(group, TGroup.class);
+		tGroup.setAccountId(account.getAccountId()); // 管理者アカウントID
+		return tGroupRepository.updatePartially(tGroup);
 	}
 }

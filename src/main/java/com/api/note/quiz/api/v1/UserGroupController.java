@@ -152,11 +152,6 @@ public class UserGroupController {
 	}
 
 	/**
-	 * グループメンバー更新
-	 */
-	// TODO 実装
-
-	/**
 	 * グループメンバー削除
 	 *
 	 * @param cd コード
@@ -169,4 +164,19 @@ public class UserGroupController {
 		return groupService.removeMember(cd, SecurityContextHolder.getContext().getAuthentication().getName(),
 				memberLoginId);
 	}
+
+	/**
+	 * グループメンバー管理者更新
+	 *
+	 * @param cd コード
+	 * @param managerLoginId 管理者にするログインID
+	 */
+	@PutMapping("/{cd}/manager/{managerLoginId}")
+	@ResponseStatus(HttpStatus.CREATED)
+	public boolean updateManager(@PathVariable String cd, @PathVariable("managerLoginId") String managerLoginId) {
+		// グループの管理者を更新する
+		return groupService.updateManager(cd, SecurityContextHolder.getContext().getAuthentication().getName(),
+				managerLoginId);
+	}
+
 }
