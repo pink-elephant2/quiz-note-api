@@ -25,7 +25,7 @@
 | フォローワー取得API						| GET		| /api/v1/account/{loginId}/follower		| - |
 | フォロー登録API							| POST		| /api/v1/user/{loginId}/follow				| ○ |
 | フォロー解除API							| POST		| /api/v1/user/{loginId}/unfollow			| ○ |
-| クイズ一覧取得API							| GET		| /api/v1/user/{loginId}/quiz				| ○※1 |
+| クイズ一覧取得API							| GET		| /api/v1/quiz								| - |
 | クイズ登録API								| POST		| /api/v1/user/{loginId}/quiz				| ○ |
 | クイズ更新API								| PUT		| /api/v1/user/{loginId}/quiz				| ○ |
 | クイズ削除API								| DELETE	| /api/v1/user/{loginId}/quiz				| ○ |
@@ -44,5 +44,3 @@
 | グループメンバー削除API					| DELETE	| /api/v1/user/{loginId}/group/{cd}/member	| ○ |
 | グループメンバー管理者更新API				| PUT		| /api/v1/user/{loginId}/group/{cd}/manager/{managerLoginId}	| ○ |
 | グループクイズ一覧取得API					| GET		| /api/v1/user/{loginId}/group/{cd}/quiz	| ○ |
-
-※1 認証不要に変更する可能性あり

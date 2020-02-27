@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.dozer.Mapper;
@@ -136,7 +138,7 @@ public class QuizServiceImpl implements QuizService {
 	 * @param クイズ一覧
 	 */
 	@Override
-	public Page<QuizResource> findList(String loginId, Pageable pageable) {
+	public Page<QuizResource> findList(@NotNull String loginId, Pageable pageable) {
 		TQuizExample example = new TQuizExample();
 
 		// 指定されたユーザーのクイズ一覧
