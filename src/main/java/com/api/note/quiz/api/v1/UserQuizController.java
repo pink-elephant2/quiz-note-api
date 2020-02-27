@@ -1,5 +1,6 @@
 package com.api.note.quiz.api.v1;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -59,10 +60,15 @@ public class UserQuizController {
 	 */
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public Page<QuizResource> findList(@SortDefault.SortDefaults({
+	public Page<QuizResource> findList(String loginId, @SortDefault.SortDefaults({
 			@SortDefault(sort = "quiz_id", direction = Direction.DESC) }) Pageable pageable) {
+
+		if (StringUtils.isEmpty(loginId)) {
+			loginId = SecurityContextHolder.getContext().getAuthentication().getName();
+		}
+
 		// クイズ一覧を取得する
-		return quizService.findList(SecurityContextHolder.getContext().getAuthentication().getName(), pageable);
+		return quizService.findList(loginId, pageable);
 	}
 
 	/**
