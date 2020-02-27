@@ -1,6 +1,8 @@
 package com.api.note.quiz.service.impl;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -22,6 +24,7 @@ import com.api.note.quiz.domain.TGroup;
 import com.api.note.quiz.domain.TGroupExample;
 import com.api.note.quiz.domain.TGroupMember;
 import com.api.note.quiz.domain.TGroupMemberExample;
+import com.api.note.quiz.domain.TGroupMemberExample.Criteria;
 import com.api.note.quiz.enums.DocumentTypeEnum;
 import com.api.note.quiz.exception.NotFoundException;
 import com.api.note.quiz.form.GroupCreateForm;
@@ -399,5 +402,43 @@ public class GroupServiceImpl implements GroupService {
 		TGroup tGroup = mapper.map(group, TGroup.class);
 		tGroup.setAccountId(account.getAccountId()); // 管理者アカウントID
 		return tGroupRepository.updatePartially(tGroup);
+	}
+
+	/**
+	 * おすすめグループ一覧を取得する
+	 *
+	 * @param loginId
+	 *            ログインID
+	 * @param pageable
+	 *            ページ情報
+	 * @param グループ一覧
+	 */
+	public Page<GroupResource> findRecommendList(String loginId, Pageable pageable) {
+		TGroupMemberExample example = new TGroupMemberExample();
+		AccountResource account = mapper.map(tAccountRepository.findOneByLoginId(loginId), AccountResource.class);
+
+		// 指定されたユーザーが所属しているグループ一覧
+		example.createCriteria().andAccountIdEqualTo(account.getAccountId())
+				// .andBlockedEqualTo(false) // ブロック問わず
+				.andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
+		List<TGroupMember> tGroupList = tGroupMemberRepository.findAllBy(example);
+
+		// 指定されたユーザーが所属していないグループ一覧
+		example.clear();
+		Criteria criteria = example.createCriteria();
+		criteria.andAccountIdNotEqualTo(account.getAccountId())
+				.andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
+		if (!tGroupList.isEmpty()) {
+			criteria.andGroupIdIn(tGroupList.stream().map(TGroupMember::getGroupId).collect(Collectors.toList()));
+		}
+
+		return tGroupMemberRepository.findPageBy(example, pageable).map(tGroupMember -> {
+			// グループを取得 TODO 性能改善
+			TGroup tGroup = tGroupRepository.findOneById(tGroupMember.getGroupId());
+
+			GroupResource resource = mapper.map(tGroup, GroupResource.class);
+			resource.setAccount(account);
+			return resource;
+		});
 	}
 }

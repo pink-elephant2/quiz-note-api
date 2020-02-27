@@ -179,4 +179,21 @@ public class UserGroupController {
 				managerLoginId);
 	}
 
+	/**
+	 * おすすめグループ一覧取得
+	 *
+	 * @param loginId
+	 *            ログインID
+	 * @param pageable
+	 *            ページ情報
+	 */
+	@GetMapping("/recommend")
+	@ResponseStatus(HttpStatus.OK)
+	public Page<GroupResource> findRecommendList(@SortDefault.SortDefaults({
+			@SortDefault(sort = "updated_at", direction = Direction.DESC) }) Pageable pageable) {
+		// TODO 実装
+		// 自分が所属するグループ一覧を取得する
+		return groupService.findRecommendList(SecurityContextHolder.getContext().getAuthentication().getName(), pageable);
+	}
+
 }

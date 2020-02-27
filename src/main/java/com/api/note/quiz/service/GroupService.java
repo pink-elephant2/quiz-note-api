@@ -110,4 +110,15 @@ public interface GroupService {
 	 */
 	public boolean updateManager(String cd, String loginId, String managerLoginId);
 
+	/**
+	 * おすすめグループ一覧を取得する
+	 *
+	 * @param loginId
+	 *            ログインID
+	 * @param pageable
+	 *            ページ情報
+	 * @param グループ一覧
+	 */
+	public Page<GroupResource> findRecommendList(String loginId, Pageable pageable);
+
 }
