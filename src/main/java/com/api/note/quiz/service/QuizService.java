@@ -35,6 +35,19 @@ public interface QuizService {
 	public Page<QuizResource> findList(String loginId, Pageable pageable);
 
 	/**
+	 * グループのクイズ一覧を取得する
+	 *
+	 * @param loginId
+	 *            ログインID
+	 * @param groupCd
+	 *            グループCD
+	 * @param pageable
+	 *            ページ情報
+	 * @param クイズ一覧
+	 */
+	public Page<QuizResource> findListByGroup(String loginId, String groupCd, Pageable pageable);
+
+	/**
 	 * クイズを登録する
 	 *
 	 * @param form

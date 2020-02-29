@@ -22,6 +22,7 @@ import com.api.note.quiz.domain.TActivityExample;
 import com.api.note.quiz.domain.TBanReport;
 import com.api.note.quiz.domain.TFollow;
 import com.api.note.quiz.domain.TFollowExample;
+import com.api.note.quiz.domain.TGroupMember;
 import com.api.note.quiz.domain.TQuiz;
 import com.api.note.quiz.domain.TQuizExample;
 import com.api.note.quiz.domain.TQuizLike;
@@ -44,9 +45,9 @@ import com.api.note.quiz.repository.TQuizRepository;
 import com.api.note.quiz.repository.TQuizTagRepository;
 import com.api.note.quiz.resources.AccountResource;
 import com.api.note.quiz.resources.QuizResource;
+import com.api.note.quiz.service.GroupService;
 import com.api.note.quiz.service.QuizService;
 import com.api.note.quiz.service.S3Service;
-
 
 /**
  * クイズサービス
@@ -76,6 +77,9 @@ public class QuizServiceImpl implements QuizService {
 
 	@Autowired
 	private TBanReportRepository tBanReportRepository;
+
+	@Autowired
+	private GroupService groupService;
 
 	@Autowired
 	private S3Service s3Service;
@@ -147,6 +151,42 @@ public class QuizServiceImpl implements QuizService {
 		return tQuizRepository.findPageBy(example, pageable).map(tQuiz -> {
 			// タグを取得 TODO 性能改善
 			List<TQuizTag> quizTagList = tQuizTagRepository.findAllByQuizId(tQuiz.getQuizId());
+
+			QuizResource resource = mapper.map(tQuiz, QuizResource.class);
+			resource.setTags(quizTagList.stream().map(TQuizTag::getName).collect(Collectors.toList()));
+			resource.setAccount(account);
+			return resource;
+		});
+	}
+
+	/**
+	 * グループのクイズ一覧を取得する
+	 *
+	 * @param loginId
+	 *            ログインID
+	 * @param groupCd
+	 *            グループCD
+	 * @param pageable
+	 *            ページ情報
+	 * @param クイズ一覧
+	 */
+	public Page<QuizResource> findListByGroup(String loginId, String groupCd, Pageable pageable) {
+		// グループメンバーを取得 TODO 性能改善
+		List<TGroupMember> groupMemberList = groupService.findMemberListAll(loginId, groupCd);
+		// TODO ブラックリスト判定
+
+		TQuizExample example = new TQuizExample();
+
+		// 指定されたユーザーのクイズ一覧
+		example.createCriteria()
+				.andAccountIdIn(groupMemberList.stream().map(TGroupMember::getAccountId).collect(Collectors.toList()))
+				.andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
+
+		return tQuizRepository.findPageBy(example, pageable).map(tQuiz -> {
+			// タグを取得 TODO 性能改善
+			List<TQuizTag> quizTagList = tQuizTagRepository.findAllByQuizId(tQuiz.getQuizId());
+			AccountResource account = mapper.map(tAccountRepository.findOneById(tQuiz.getAccountId()),
+					AccountResource.class);
 
 			QuizResource resource = mapper.map(tQuiz, QuizResource.class);
 			resource.setTags(quizTagList.stream().map(TQuizTag::getName).collect(Collectors.toList()));

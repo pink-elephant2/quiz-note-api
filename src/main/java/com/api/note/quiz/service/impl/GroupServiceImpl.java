@@ -271,6 +271,29 @@ public class GroupServiceImpl implements GroupService {
 	}
 
 	/**
+	 * メンバー一覧を取得する
+	 *
+	 * @param loginId
+	 *            ログインID TODO 自分が所属するグループに絞るか仕様検討
+	 * @param cd
+	 *            コード
+	 * @param メンバー一覧
+	 */
+	@Override
+	public List<TGroupMember> findMemberListAll(String loginId, String cd) {
+		// グループを取得
+		TGroup group = tGroupRepository.findOneByCd(cd);
+
+		// グループメンバーを取得
+		TGroupMemberExample example = new TGroupMemberExample();
+		example.createCriteria().andGroupIdEqualTo(group.getGroupId())
+				.andBlockedEqualTo(false) // ブロックされていない
+				.andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
+
+		return tGroupMemberRepository.findAllBy(example);
+	}
+
+	/**
 	 * メンバーを登録する
 	 *
 	 * @param cd コード

@@ -55,18 +55,23 @@ public class UserQuizController {
 	 *
 	 * @param loginId
 	 *            ログインID
+	 * @param groupCd グループコード
 	 * @param pageable
 	 *            ページ情報
 	 */
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public Page<QuizResource> findList(String loginId, @SortDefault.SortDefaults({
+	public Page<QuizResource> findList(String loginId, String groupCd, @SortDefault.SortDefaults({
 			@SortDefault(sort = "quiz_id", direction = Direction.DESC) }) Pageable pageable) {
 
 		if (StringUtils.isEmpty(loginId)) {
 			loginId = SecurityContextHolder.getContext().getAuthentication().getName();
 		}
 
+		if (!StringUtils.isEmpty(groupCd)) {
+			// グループのクイズ一覧を取得する
+			return quizService.findListByGroup(loginId, groupCd, pageable);
+		}
 		// クイズ一覧を取得する
 		return quizService.findList(loginId, pageable);
 	}

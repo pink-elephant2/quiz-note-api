@@ -1,8 +1,11 @@
 package com.api.note.quiz.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.api.note.quiz.domain.TGroupMember;
 import com.api.note.quiz.form.GroupCreateForm;
 import com.api.note.quiz.form.GroupImageForm;
 import com.api.note.quiz.form.GroupMemberCreateForm;
@@ -83,6 +86,17 @@ public interface GroupService {
 	 * @param メンバー一覧
 	 */
 	public Page<GroupMemberResource> findMemberList(String loginId, String cd, Pageable pageable);
+
+	/**
+	 * メンバー一覧を取得する
+	 *
+	 * @param loginId
+	 *            ログインID TODO 自分が所属するグループに絞るか仕様検討
+	 * @param cd
+	 *            コード
+	 * @param メンバー一覧
+	 */
+	public List<TGroupMember> findMemberListAll(String loginId, String cd);
 
 	/**
 	 * メンバーを登録する
