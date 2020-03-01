@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -193,8 +192,8 @@ public class GroupServiceImpl implements GroupService {
 			// ランダム文字列発行
 			String cd = RandomStringUtils.randomAlphanumeric(10);
 
-			// S3に保存、URLを設定する TODO S3ディレクトリパス検討
-			String fileName = SecurityContextHolder.getContext().getAuthentication().getName() + "/" + cd + ".png"; // TODO ファイル拡張子
+			// S3に保存、URLを設定する
+			String fileName = form.getCd() + "/" + cd + ".png"; // TODO ファイル拡張子
 			String filePath = s3Service.upload(DocumentTypeEnum.GROUP, fileName, form.getUpfile());
 
 			// グループ画像を更新する
@@ -205,7 +204,7 @@ public class GroupServiceImpl implements GroupService {
 					.andGroupIdEqualTo(group.getGroupId())
 					.andAccountIdEqualTo(SessionInfoContextHolder.getSessionInfo().getAccountId())
 					.andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
-			return BooleanUtils.toBoolean(tGroupRepository.updatePartiallyBy(mapper.map(form, TGroup.class), example));
+			return BooleanUtils.toBoolean(tGroupRepository.updatePartiallyBy(group, example));
 
 		} catch (IOException e) {
 			e.printStackTrace();
