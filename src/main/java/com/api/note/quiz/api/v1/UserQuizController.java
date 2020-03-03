@@ -43,12 +43,12 @@ public class UserQuizController {
 	 * @param cd
 	 *            コード
 	 */
-	//	@GetMapping("/{cd}")
-	//	@ResponseStatus(HttpStatus.OK)
-	//	public QuizResource find(@PathVariable("cd") String cd) {
-	//		// クイズを取得する
-	//		return quizService.find(cd);
-	//	}
+	@GetMapping("/{cd}")
+	@ResponseStatus(HttpStatus.OK)
+	public QuizResource find(@PathVariable("cd") String cd) {
+		// クイズを取得する
+		return quizService.find(cd);
+	}
 
 	/**
 	 * クイズ一覧取得

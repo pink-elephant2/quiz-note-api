@@ -32,7 +32,6 @@ import com.api.note.quiz.enums.ActivityTypeEnum;
 import com.api.note.quiz.enums.DocumentTypeEnum;
 import com.api.note.quiz.enums.ReportReasonEnum;
 import com.api.note.quiz.enums.ReportTargetEnum;
-import com.api.note.quiz.exception.NotFoundException;
 import com.api.note.quiz.form.QuizCreateForm;
 import com.api.note.quiz.form.QuizSoundForm;
 import com.api.note.quiz.form.QuizUpdateForm;
@@ -96,12 +95,7 @@ public class QuizServiceImpl implements QuizService {
 	 */
 	@Override
 	public QuizResource find(String cd) {
-		TQuizExample example = new TQuizExample();
-		example.createCriteria().andQuizCdEqualTo(cd).andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
-		TQuiz quiz = tQuizRepository.findOneBy(example);
-		if (quiz == null) {
-			throw new NotFoundException("クイズが存在しません");
-		}
+		TQuiz quiz = tQuizRepository.findOneByCd(cd);
 
 		QuizResource resource = mapper.map(quiz, QuizResource.class);
 
