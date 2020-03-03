@@ -191,8 +191,8 @@ public class UserGroupController {
 	@ResponseStatus(HttpStatus.OK)
 	public Page<GroupResource> findRecommendList(@SortDefault.SortDefaults({
 			@SortDefault(sort = "updated_at", direction = Direction.DESC) }) Pageable pageable) {
-		// TODO 実装
-		// 自分が所属するグループ一覧を取得する
+
+		// 自分が所属しないグループ一覧を取得する
 		return groupService.findRecommendList(SecurityContextHolder.getContext().getAuthentication().getName(), pageable);
 	}
 

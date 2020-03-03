@@ -1,5 +1,8 @@
 package com.api.note.quiz.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.api.common.business.repository.BaseRepository;
 import com.api.note.quiz.domain.TGroup;
 import com.api.note.quiz.domain.TGroupExample;
@@ -25,4 +28,9 @@ public interface TGroupRepository extends BaseRepository<TGroupKey, TGroup, TGro
 	 * レコードを登録してIDを返却する
 	 */
 	public Integer createReturnId(TGroup tGroup);
+
+	/**
+	 * 所属していないグループを取得する
+	 */
+	public Page<TGroup> findPageWithout(Integer accountId, Pageable pageable);
 }

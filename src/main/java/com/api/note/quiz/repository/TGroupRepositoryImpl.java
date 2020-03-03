@@ -1,6 +1,12 @@
 package com.api.note.quiz.repository;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.api.note.quiz.consts.CommonConst;
@@ -61,5 +67,29 @@ public class TGroupRepositoryImpl implements TGroupRepository {
 	public Integer createReturnId(TGroup tGroup) {
 		this.beforeInsert(tGroup);
 		return tGroupMapper.insertReturnId(tGroup);
+	}
+
+	/**
+	 * 所属していないグループを取得する
+	 */
+	@Override
+	public Page<TGroup> findPageWithout(Integer accountId, Pageable pageable) {
+		long total = this.getMapper().countByWithout(accountId);
+
+		System.out.println(total);
+
+		if (total == 0L) {
+			return new PageImpl<TGroup>(Collections.emptyList(), pageable, total);
+
+		} else {
+			Integer limit = Integer.valueOf(pageable.getPageSize());
+			int offset = (int) (pageable.getOffset());
+
+			System.out.println(limit);
+			System.out.println(offset);
+			List<TGroup> pageContent1 = this.getMapper().selectByWithout(accountId, limit, offset);
+
+			return new PageImpl<TGroup>(pageContent1, pageable, total);
+		}
 	}
 }

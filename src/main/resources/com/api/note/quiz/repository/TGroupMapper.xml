@@ -401,4 +401,44 @@
       updated_by = #{updatedBy,jdbcType=VARCHAR}
     where group_id = #{groupId,jdbcType=INTEGER}
   </update>
+
+  <!--  所属していないグループを取得する -->
+  <select id="countByWithout" parameterType="java.util.Map" resultType="java.lang.Long">
+    select
+      count(group_id)
+    from
+      t_group
+    where
+      group_id not in (
+        select
+          group_id
+        from
+          t_group_member
+        where
+          account_id = #{accountId,jdbcType=BIGINT}
+          and deleted = '0'
+      )
+      and deleted = '0'
+  </select>
+
+  <!--  所属していないグループを取得する -->
+  <select id="selectByWithout" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+      *
+    from
+      t_group
+    where
+      group_id not in (
+        select
+          group_id
+        from
+          t_group_member
+        where
+          account_id = #{accountId,jdbcType=BIGINT}
+          and deleted = '0'
+      )
+      and deleted = '0'
+    limit #{limitClause}
+    offset #{offsetClause}
+  </select>
 </mapper>
