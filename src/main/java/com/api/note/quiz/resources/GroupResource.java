@@ -42,4 +42,8 @@ public class GroupResource {
 	/** ログイン状態の場合、ブロックされているかどうか */
 	@JsonProperty("isBlocked")
 	private boolean isBlocked;
+
+	/** ログイン状態の場合、メンバーかどうか */
+	@JsonProperty("isMember")
+	private boolean isMember;
 }

@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,8 +73,6 @@ public class GroupServiceImpl implements GroupService {
 	 */
 	@Override
 	public GroupResource find(String loginId, String cd) {
-		// TODO 自分が所属するグループのみ検索する
-
 		TGroup group = tGroupRepository.findOneByCd(cd);
 		if (group == null) {
 			throw new NotFoundException("グループが存在しません");
@@ -81,8 +81,27 @@ public class GroupServiceImpl implements GroupService {
 		GroupResource resource = mapper.map(group, GroupResource.class);
 
 		// TODO 投稿ユーザー View または キャッシュ
-		resource.setAccount(mapper.map(tAccountRepository.findOneById(group.getAccountId()), AccountResource.class));
+		TAccount account = tAccountRepository.findOneById(group.getAccountId());
+		resource.setAccount(mapper.map(account, AccountResource.class));
 
+		// ログイン済みの場合
+		if (!(SecurityContextHolder.getContext() == null
+				|| SecurityContextHolder.getContext().getAuthentication() == null
+				|| SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
+				&& SecurityContextHolder.getContext().getAuthentication().getName().equals(loginId)) {
+
+			// グループに所属しているか
+			TGroupMemberExample example = new TGroupMemberExample();
+			example.createCriteria().andGroupIdEqualTo(group.getGroupId())
+					.andAccountIdEqualTo(tAccountRepository.findOneByLoginId(loginId).getAccountId())
+					.andDeletedEqualTo(CommonConst.DeletedFlag.OFF);
+			TGroupMember groupMember = tGroupMemberRepository.findOneBy(example);
+
+			if (groupMember != null) {
+				resource.setMember(BooleanUtils.isNotTrue(groupMember.getBlocked()));
+				resource.setBlocked(BooleanUtils.isTrue(groupMember.getBlocked()));
+			}
+		}
 		return resource;
 	}
 
