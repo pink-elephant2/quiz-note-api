@@ -99,6 +99,10 @@ public class QuizServiceImpl implements QuizService {
 
 		QuizResource resource = mapper.map(quiz, QuizResource.class);
 
+		// タグを取得 TODO 性能改善
+		List<TQuizTag> quizTagList = tQuizTagRepository.findAllByQuizId(quiz.getQuizId());
+		resource.setTags(quizTagList.stream().map(TQuizTag::getName).collect(Collectors.toList()));
+
 		// TODO 投稿ユーザー View または キャッシュ
 		resource.setAccount(mapper.map(tAccountRepository.findOneById(quiz.getAccountId()), AccountResource.class));
 
