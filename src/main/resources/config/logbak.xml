@@ -1,5 +1,9 @@
 <!-- Logback configuration. See http://logback.qos.ch/manual/index.html -->
 <configuration scan="true" scanPeriod="60 seconds">
+
+	<property name="logFilePath" value="/home/ec2-user/project/logs/" />
+	<property name="logFileName" value="quiz-note-api" />
+
 	<!-- Simple file output -->
 	<appender name="FILE"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -10,20 +14,18 @@
 			</pattern>
 			<charset>UTF-8</charset>
 		</encoder>
+
+		<file>${logFilePath}${logFileName}.log</file>
+
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>/home/ec2-user/project/logs/quiz-note-api-%d{yyyy-MM-dd}.%i.log
-			</fileNamePattern>
-			<timeBasedFileNamingAndTriggeringPolicy
-				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<maxFileSize>64 MB</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
+			<fileNamePattern>${logFilePath}${logFileName}-%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+			<maxHistory>3</maxHistory>
 		</rollingPolicy>
 
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
 			<level>DEBUG</level>
 		</filter>
-		<prudent>true</prudent>
 	</appender>
 
 	<!-- Console output -->
