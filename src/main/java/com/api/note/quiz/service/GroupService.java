@@ -112,8 +112,9 @@ public interface GroupService {
 	 * @param cd コード
 	 * @param loginId ログインID
 	 * @param memberLoginId 削除対象のログインID
+	 * @param isBlocked ブラックリストに入れるか
 	 */
-	public boolean removeMember(String cd, String loginId, String memberLoginId);
+	public boolean removeMember(String cd, String loginId, String memberLoginId, boolean isBlocked);
 
 	/**
 	 * グループの管理者を更新する

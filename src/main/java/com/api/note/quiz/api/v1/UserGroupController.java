@@ -156,13 +156,14 @@ public class UserGroupController {
 	 *
 	 * @param cd コード
 	 * @param memberLoginId 削除対象のログインID
+	 * @param isBlocked ブラックリストに入れるか
 	 */
 	@DeleteMapping("/{cd}/member")
 	@ResponseStatus(HttpStatus.CREATED)
-	public boolean removeMember(@PathVariable("cd") String cd, String memberLoginId) {
+	public boolean removeMember(@PathVariable("cd") String cd, String memberLoginId, boolean isBlocked) {
 		// グループメンバーを削除する
 		return groupService.removeMember(cd, SecurityContextHolder.getContext().getAuthentication().getName(),
-				memberLoginId);
+				memberLoginId, isBlocked);
 	}
 
 	/**
@@ -193,7 +194,8 @@ public class UserGroupController {
 			@SortDefault(sort = "updated_at", direction = Direction.DESC) }) Pageable pageable) {
 
 		// 自分が所属しないグループ一覧を取得する
-		return groupService.findRecommendList(SecurityContextHolder.getContext().getAuthentication().getName(), pageable);
+		return groupService.findRecommendList(SecurityContextHolder.getContext().getAuthentication().getName(),
+				pageable);
 	}
 
 }

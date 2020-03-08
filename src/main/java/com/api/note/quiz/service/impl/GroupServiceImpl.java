@@ -102,6 +102,11 @@ public class GroupServiceImpl implements GroupService {
 				resource.setBlocked(BooleanUtils.isTrue(groupMember.getBlocked()));
 			}
 		}
+
+		// ブロックされている場合
+		if (resource.isBlocked()) {
+			throw new NotFoundException("グループが存在しません");
+		}
 		return resource;
 	}
 
@@ -358,9 +363,10 @@ public class GroupServiceImpl implements GroupService {
 	 * @param cd コード
 	 * @param loginId ログインID
 	 * @param memberLoginId 削除対象のログインID
+	 * @param isBlocked ブラックリストに入れるか
 	 */
 	@Override
-	public boolean removeMember(String cd, String loginId, String memberLoginId) {
+	public boolean removeMember(String cd, String loginId, String memberLoginId, boolean isBlocked) {
 		// グループを取得
 		GroupResource group = find(loginId, cd);
 
@@ -385,8 +391,13 @@ public class GroupServiceImpl implements GroupService {
 			throw new NotFoundException("メンバーが存在しません");
 		}
 
-		// グループメンバー削除
-		groupMember.setDeleted(CommonConst.DeletedFlag.ON);
+		if (isBlocked) {
+			// ブラックリストに入れる
+			groupMember.setBlocked(true);
+		} else {
+			// グループメンバー削除
+			groupMember.setDeleted(CommonConst.DeletedFlag.ON);
+		}
 		boolean ret = tGroupMemberRepository.updatePartially(groupMember);
 
 		// 残りのメンバーを取得
