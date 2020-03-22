@@ -45,7 +45,7 @@ logging:
 
 quiz:
   app-name: みんなのクイズ手帳
-  url: https://www.quiz-note.com/
+  url: https://quiz-note.com/
   cloud-host-url: ${QUIZ_NOTE_CLOUD_HOST_URL:https://cdn.quiz-note.com}
   s3-access-key: ${QUIZ_NOTE_S3_ACCESS_KEY:}
   s3-secret-key: ${QUIZ_NOTE_S3_SECRET_KEY:}
